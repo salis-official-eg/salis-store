@@ -728,8 +728,44 @@
             toggleCart();
         }
 
-        renderProducts();
-        updateCartUI();
+        // الأسعار بتتجاب من جدول products في Supabase (المصدر الوحيد للأسعار).
+        // الأسعار المكتوبة في مصفوفة products فوق احتياطية بس لو الاتصال فشل.
+        async function syncProductsFromDB() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('id, price, active');
+                if (error) throw error;
+                if (!Array.isArray(data) || data.length === 0) throw new Error('empty-products');
+
+                const byId = new Map(data.map(r => [r.id, r]));
+                for (let i = products.length - 1; i >= 0; i--) {
+                    const row = byId.get(products[i].id);
+                    if (!row) continue;
+                    if (row.active === false) { products.splice(i, 1); continue; }
+                    const price = Number(row.price);
+                    if (Number.isInteger(price) && price > 0) products[i].price = price;
+                }
+
+                // السلة تتحدث بالأسعار الجديدة وتشيل المنتجات المتوقفة
+                cart = cart.filter(item => products.some(p => p.id === item.id));
+                cart.forEach(item => {
+                    item.price = products.find(p => p.id === item.id).price;
+                });
+                saveCart();
+            } catch (e) {
+                console.error('Price sync failed, using built-in prices:', e);
+            }
+        }
+
+        Promise.race([
+            syncProductsFromDB(),
+            new Promise(resolve => setTimeout(resolve, 4000))
+        ]).finally(() => {
+            renderProducts();
+            updateCartUI();
+        });
 
         // تحويل الأرقام العربية لإنجليزية تلقائيًا في خانة الموبايل
         const phoneInput = document.getElementById('cust-phone');
