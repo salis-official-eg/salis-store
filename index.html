@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="سَلِسْ - ملابس داخلية وبوكسرات قطنية 100% بخامة قطن مصري ناعمة. الدفع عند الاستلام لجميع محافظات مصر.">
+    <meta name="theme-color" content="#94B097">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="سَلِسْ | ملابس قطنية فاخرة">
+    <meta property="og:description" content="ملابس داخلية وبوكسرات قطن مصري 100%. الدفع عند الاستلام لجميع المحافظات.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M44 35C44 27 36 23 29 26C22 29 22 39 29 44C36 49 46 53 45 63C44 72 34 76 26 73C19 70 18 63 21 58' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M45 55C58 52 72 41 72 26C72 16 63 13 57 20C50 28 49 52 60 66C68 75 79 71 85 63' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
     <title>سَلِسْ | Salis - ملابس قطنية فاخرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -244,8 +248,20 @@
                         <input type="tel" id="cust-phone" required inputmode="numeric" maxlength="11" pattern="01[0125][0-9]{8}" title="اكتب رقم موبايل مصري صحيح من 11 رقم، مثال: 01012345678" autocomplete="tel" placeholder="010xxxxxxxx" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-earth mb-1">العنوان بالتفصيل والمحافظة *</label>
-                        <textarea id="cust-address" required rows="2" minlength="5" maxlength="500" placeholder="المحافظة، المنطقة، اسم الشارع، رقم العمارة والشقة" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"></textarea>
+                        <label class="block text-xs font-bold text-earth mb-1">المحافظة *</label>
+                        <select id="cust-gov" required autocomplete="address-level1" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"><option value="">اختر المحافظة</option></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-earth mb-1">العنوان بالتفصيل *</label>
+                        <textarea id="cust-address" required rows="2" minlength="5" maxlength="500" placeholder="المنطقة، اسم الشارع، رقم العمارة والشقة" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-earth mb-1">كود الخصم (اختياري)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="coupon-input" maxlength="30" dir="ltr" autocomplete="off" placeholder="SALIS10" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm font-en uppercase">
+                            <button type="button" onclick="applyCoupon()" class="px-5 rounded-xl bg-earth text-white text-sm font-bold whitespace-nowrap">تطبيق</button>
+                        </div>
+                        <p id="coupon-msg" class="text-xs mt-1 font-bold"></p>
                     </div>
                     <div style="position:absolute;left:0;top:0;width:0;height:0;overflow:hidden;opacity:0;pointer-events:none;" aria-hidden="true">
                         <input type="text" id="cust-company-url" name="company_url" tabindex="-1" autocomplete="off">
@@ -263,19 +279,31 @@
                         </svg>
                     </div>
                     <h4 class="text-xl font-extrabold text-earth">تم استلام طلبك بنجاح!</h4>
-                    <p class="text-sm text-earth-light">شكراً لاختيارك سَلِسْ. هنتواصل معاك قريباً لتأكيد ميعاد الشحن.</p>
-                    <button onclick="resetAfterOrder()" class="mt-4 px-6 py-2 bg-earth text-white text-sm font-bold rounded-full">متابعة التسوق</button>
+                    <p class="text-sm text-earth-light">شكراً لاختيارك سَلِسْ. هنتصل بيك على رقمك لتأكيد الطلب وميعاد الشحن، والدفع عند الاستلام.</p>
+                    <a id="success-wa" href="https://wa.me/201096547794" target="_blank" rel="noopener" class="inline-block mt-2 px-6 py-2 bg-[#25D366] text-white text-sm font-bold rounded-full">تواصل معنا على واتساب</a>
+                    <div><button onclick="resetAfterOrder()" class="mt-2 px-6 py-2 bg-earth text-white text-sm font-bold rounded-full">متابعة التسوق</button></div>
                 </div>
             </div>
 
             <div id="cart-footer" class="p-6 border-t border-cotton-border bg-cotton/50 hidden">
-                <div class="flex items-center justify-between text-base font-bold text-earth">
+                <div class="space-y-1 text-sm text-earth mb-3">
+                    <div class="flex justify-between"><span>المجموع</span><span id="sum-sub">0 ج.م</span></div>
+                    <div id="sum-disc-row" class="hidden"><div class="flex justify-between text-sage-dark font-bold"><span>الخصم</span><span id="sum-disc"></span></div></div>
+                    <div class="flex justify-between"><span>الشحن</span><span id="sum-ship">—</span></div>
+                    <p id="ship-hint" class="text-xs text-sage-dark font-bold"></p>
+                </div>
+                <div class="flex items-center justify-between text-base font-bold text-earth pt-3 border-t border-cotton-border">
                     <span>الإجمالي:</span>
                     <span id="cart-total" class="text-xl text-sage-dark">0 ج.م</span>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Floating WhatsApp -->
+    <a id="wa-fab" href="https://wa.me/201096547794?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%20%D8%B3%D9%8E%D9%84%D9%90%D8%B3%D9%92%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1" target="_blank" rel="noopener" aria-label="تواصل معنا على واتساب" class="fixed bottom-5 left-5 z-30 w-14 h-14 rounded-full bg-[#25D366] shadow-lg shadow-black/20 flex items-center justify-center hover:scale-105 transition-transform">
+        <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5a9.5 9.5 0 00-8.2 14.3L2.5 21.5l4.8-1.2A9.5 9.5 0 1012 2.5z"/><path d="M8.7 8.4c.2 2.4 3 5.4 5.9 5.8l1.3-1.3-1.9-1-.9.7c-.9-.4-1.8-1.3-2.2-2.2l.7-.9-1-1.9z" fill="white" stroke="none"/></svg>
+    </a>
 
     <!-- Toast Notification -->
     <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 bg-earth text-white px-5 py-3 rounded-xl shadow-lg text-sm font-bold transform translate-y-20 opacity-0 transition-all duration-300">
@@ -417,6 +445,125 @@
 
         cart = loadCart();
 
+        // ===== المخزون والشحن والكوبونات (من قاعدة البيانات) =====
+        const GOVS = ['القاهرة','الجيزة','الإسكندرية','القليوبية','الشرقية','الدقهلية','البحيرة','المنوفية','الغربية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','مطروح','شمال سيناء','جنوب سيناء'];
+        let stockRows = [];
+        let shippingRates = [];
+        let storeSettings = { default_shipping_fee: 0, free_shipping_over: null, whatsapp_number: '201096547794' };
+        let coupon = null; // { code, discount }
+
+        function waLink(text) {
+            return 'https://wa.me/' + storeSettings.whatsapp_number + '?text=' + encodeURIComponent(text);
+        }
+
+        // المتاح من صنف معين. المنتج اللي ملوش مخزون متسجل بيتباع بدون حد
+        function stockFor(productId, size, colorName) {
+            const rows = stockRows.filter(r => r.product_id === productId);
+            if (rows.length === 0) return Infinity;
+            const m = rows.filter(r => (r.size === size || r.size === '') && (r.color === colorName || r.color === ''));
+            return m.length ? Math.max(...m.map(r => r.qty)) : 0;
+        }
+
+        function sizeBtn(product, sel, size) {
+            const left = stockFor(product.id, size, sel.color.name);
+            const out = left === 0;
+            const cls = sel.size === size
+                ? 'bg-earth text-white border-earth'
+                : (out ? 'bg-cotton text-earth-light border-cotton-border opacity-40 line-through cursor-not-allowed'
+                       : 'bg-cotton text-earth border-cotton-border hover:border-sage');
+            const low = left > 0 && left <= 3 ? `<span class="block text-[9px] font-semibold text-red-500 font-arabic">باقي ${left}</span>` : '';
+            return `<button ${out ? 'disabled' : ''} onclick="selectSize(${product.id}, '${size}')" class="px-3 py-1 rounded-lg text-xs font-en font-bold border transition-all ${cls}">${size}${low}</button>`;
+        }
+
+        function fillGovs(rows) {
+            const sel = document.getElementById('cust-gov');
+            const keep = sel.value;
+            sel.innerHTML = '<option value="">اختر المحافظة</option>' + rows.map(r => `<option value="${r.governorate}">${r.governorate}</option>`).join('');
+            sel.value = keep;
+        }
+
+        function calcTotals() {
+            const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const disc = coupon ? Math.min(coupon.discount, sub) : 0;
+            const gov = document.getElementById('cust-gov').value;
+            let fee = storeSettings.default_shipping_fee || 0;
+            const rate = shippingRates.find(r => r.governorate === gov);
+            if (gov && rate) fee = rate.fee;
+            const freeOver = storeSettings.free_shipping_over;
+            if (freeOver != null && (sub - disc) >= freeOver) fee = 0;
+            return { sub, disc, fee, total: sub - disc + fee, gov };
+        }
+
+        function renderTotals() {
+            const t = calcTotals();
+            const money = n => `${n} ج.م`;
+            const freeOver = storeSettings.free_shipping_over;
+            const freeReached = freeOver != null && (t.sub - t.disc) >= freeOver;
+            document.getElementById('sum-sub').textContent = money(t.sub);
+            document.getElementById('sum-disc-row').classList.toggle('hidden', !t.disc);
+            document.getElementById('sum-disc').textContent = '-' + money(t.disc);
+            let ship;
+            if (freeReached) ship = 'مجاني 🎉';
+            else if (!t.gov && shippingRates.some(r => r.fee > 0)) ship = 'يُحسب بعد اختيار المحافظة';
+            else ship = t.fee ? money(t.fee) : 'مجاني';
+            document.getElementById('sum-ship').textContent = ship;
+            document.getElementById('ship-hint').textContent =
+                (freeOver != null && !freeReached && t.sub > 0) ? `زوّد ${freeOver - (t.sub - t.disc)} ج.م واستمتع بشحن مجاني` : '';
+            document.getElementById('cart-total').textContent = money(t.total);
+        }
+
+        function couponMsg(text, ok) {
+            const el = document.getElementById('coupon-msg');
+            el.textContent = text;
+            el.className = 'text-xs mt-1 font-bold ' + (ok ? 'text-sage-dark' : 'text-red-600');
+        }
+
+        async function applyCoupon() {
+            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+            if (!code) { coupon = null; couponMsg('', true); renderTotals(); return; }
+            if (!supabaseClient || cart.length === 0) { couponMsg('أضف منتجات للسلة الأول', false); return; }
+            const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const { data, error } = await supabaseClient.rpc('validate_coupon', { p_code: code, p_subtotal: sub });
+            if (error || !data) { couponMsg('تعذر التحقق من الكود الآن، حاول مرة أخرى.', false); return; }
+            if (data.valid) { coupon = { code, discount: data.discount }; couponMsg(`تم تطبيق الكود: خصم ${data.discount} ج.م`, true); }
+            else { coupon = null; couponMsg(data.message, false); }
+            renderTotals();
+        }
+
+        // لو السلة اتغيرت بعد تطبيق الكود: نعيد التحقق بالمجموع الجديد
+        async function refreshCoupon() {
+            if (!coupon) return;
+            if (cart.length === 0 || !supabaseClient) { coupon = null; couponMsg('', true); renderTotals(); return; }
+            const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const { data } = await supabaseClient.rpc('validate_coupon', { p_code: coupon.code, p_subtotal: sub });
+            if (data && data.valid) coupon.discount = data.discount;
+            else { coupon = null; couponMsg((data && data.message) || 'الكود لم يعد صالحاً', false); }
+            renderTotals();
+        }
+
+        async function loadStoreData() {
+            if (!supabaseClient) return;
+            try {
+                const [st, rt, cf] = await Promise.all([
+                    supabaseClient.from('product_stock').select('product_id, size, color, qty'),
+                    supabaseClient.from('shipping_rates').select('governorate, fee').eq('active', true),
+                    supabaseClient.from('store_settings').select('default_shipping_fee, free_shipping_over, whatsapp_number').eq('id', 1).maybeSingle()
+                ]);
+                if (!st.error && Array.isArray(st.data)) stockRows = st.data;
+                if (!rt.error && Array.isArray(rt.data) && rt.data.length) {
+                    shippingRates = rt.data.sort((a, b) => GOVS.indexOf(a.governorate) - GOVS.indexOf(b.governorate));
+                    fillGovs(shippingRates);
+                }
+                if (!cf.error && cf.data) {
+                    storeSettings = { ...storeSettings, ...cf.data };
+                    document.getElementById('wa-fab').href = waLink('أهلاً سَلِسْ، عندي استفسار');
+                    document.getElementById('success-wa').href = waLink('أهلاً سَلِسْ، لسه عامل طلب وعايز أتأكد منه');
+                }
+            } catch (e) {
+                console.error('Store data load failed:', e);
+            }
+        }
+
         products.forEach(p => {
             selectedState[p.id] = {
                 color: p.colors[0],
@@ -489,12 +636,7 @@
                         <div class="mt-4">
                             <span class="text-xs font-bold text-earth block mb-2">المقاس:</span>
                             <div class="flex flex-wrap gap-1.5">
-                                ${product.sizes.map(size => `
-                                    <button onclick="selectSize(${product.id}, '${size}')"
-                                        class="px-3 py-1 rounded-lg text-xs font-en font-bold border transition-all ${currentSel.size === size ? 'bg-earth text-white border-earth' : 'bg-cotton text-earth border-cotton-border hover:border-sage'}">
-                                        ${size}
-                                    </button>
-                                `).join('')}
+                                ${product.sizes.map(size => sizeBtn(product, currentSel, size)).join('')}
                             </div>
                         </div>
                     </div>
@@ -526,6 +668,8 @@
         function selectColor(productId, colorIdx) {
             const product = products.find(p => p.id === productId);
             selectedState[productId].color = product.colors[colorIdx];
+            const cur = selectedState[productId];
+            if (cur.size && stockFor(productId, cur.size, cur.color.name) === 0) cur.size = null;
             const activeCat = document.querySelector('.filter-btn.active')?.dataset.cat || 'all';
             renderProducts(activeCat);
         }
@@ -546,6 +690,11 @@
             const itemKey = `${product.id}-${sel.color.name}-${sel.size}`;
 
             const existing = cart.find(item => item.key === itemKey);
+            const left = stockFor(product.id, sel.size, sel.color.name);
+            if ((existing ? existing.qty : 0) >= left) {
+                showToast(left === 0 ? 'الصنف ده نفد حالياً' : 'المتاح من الصنف ده ' + left + ' قطعة فقط');
+                return;
+            }
             if (existing) {
                 if (existing.qty >= MAX_QTY) {
                     showToast('الحد الأقصى ' + MAX_QTY + ' قطعة لكل صنف');
@@ -571,6 +720,11 @@
         function updateQty(key, delta) {
             const idx = cart.findIndex(item => item.key === key);
             if (idx > -1) {
+                const left = stockFor(cart[idx].id, cart[idx].size, cart[idx].color);
+                if (delta > 0 && cart[idx].qty >= left) {
+                    showToast('المتاح من الصنف ده ' + left + ' قطعة فقط');
+                    return;
+                }
                 cart[idx].qty = Math.min(cart[idx].qty + delta, MAX_QTY);
                 if (cart[idx].qty <= 0) {
                     cart.splice(idx, 1);
@@ -629,7 +783,8 @@
                 `;
             }).join('');
 
-            totalEl.textContent = `${totalPrice} ج.م`;
+            renderTotals();
+            if (coupon) refreshCoupon();
         }
 
         function toggleCart() {
@@ -660,6 +815,8 @@
             document.getElementById('checkout-form').classList.add('hidden');
             document.getElementById('cart-footer').classList.add('hidden');
             document.getElementById('order-success').classList.remove('hidden');
+            coupon = null;
+            couponMsg('', true);
             cart = [];
             saveCart();
             document.getElementById('cart-badge').textContent = '0';
@@ -687,6 +844,8 @@
                 customer_name: document.getElementById('cust-name').value.trim(),
                 customer_phone: normalizeDigits(document.getElementById('cust-phone').value),
                 customer_address: document.getElementById('cust-address').value.trim(),
+                governorate: document.getElementById('cust-gov').value,
+                coupon_code: coupon ? coupon.code : null,
                 items: cart.map(item => ({
                     id: item.id,
                     name: item.name,
@@ -695,7 +854,7 @@
                     qty: item.qty,
                     price: item.price
                 })),
-                total_amount: cart.reduce((sum, item) => sum + (item.price * item.qty), 0)
+                total_amount: calcTotals().total
             };
 
             try {
@@ -711,8 +870,18 @@
             } catch (err) {
                 console.error('Supabase Error:', err);
                 let message = 'حدث خطأ أثناء إرسال الطلب، تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
-                if (err && typeof err.message === 'string' && err.message.includes('too many orders')) {
+                const em = (err && typeof err.message === 'string') ? err.message : '';
+                if (em.includes('too many orders')) {
                     message = 'تم إرسال طلبات كثيرة بنفس الرقم، حاول مرة أخرى بعد قليل.';
+                } else if (em.includes('out of stock')) {
+                    message = 'نفد المخزون من أحد المنتجات. راجع السلة وجرّب تاني.';
+                    loadStoreData().then(() => renderProducts(document.querySelector('.filter-btn.active')?.dataset.cat || 'all'));
+                } else if (em.includes('invalid coupon')) {
+                    message = 'كود الخصم لم يعد صالحاً. شيله من الخانة وجرّب تاني.';
+                    coupon = null;
+                    renderTotals();
+                } else if (em.includes('busy')) {
+                    message = 'الموقع مشغول لحظات، جرّب بعد دقيقة.';
                 }
                 errorBox.textContent = message;
                 errorBox.classList.remove('hidden');
@@ -760,7 +929,7 @@
         }
 
         Promise.race([
-            syncProductsFromDB(),
+            Promise.all([syncProductsFromDB(), loadStoreData()]),
             new Promise(resolve => setTimeout(resolve, 4000))
         ]).finally(() => {
             renderProducts();
@@ -772,6 +941,10 @@
         phoneInput.addEventListener('input', () => {
             phoneInput.value = normalizeDigits(phoneInput.value);
         });
+
+        fillGovs(GOVS.map(g => ({ governorate: g })));
+        document.getElementById('cust-gov').addEventListener('change', renderTotals);
+        document.getElementById('coupon-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
         // إغلاق السلة بزرار Esc
         document.addEventListener('keydown', (e) => {
