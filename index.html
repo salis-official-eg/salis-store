@@ -71,6 +71,8 @@
 </head>
 <body class="antialiased selection:bg-sage selection:text-white">
 
+    <div id="announce" class="hidden text-center text-sm font-bold px-4 py-2"></div>
+
     <!-- Navbar -->
     <header class="sticky top-0 z-40 bg-cotton/90 backdrop-blur-md border-b border-cotton-border">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
@@ -93,13 +95,13 @@
                 <a href="#contact" class="text-earth hover:text-sage-dark transition-colors">تواصل معنا</a>
             </nav>
 
-            <button onclick="toggleCart()" aria-label="فتح السلة" class="relative flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all">
+            <div class="flex items-center gap-2"><button onclick="openAccount()" aria-label="حسابي" class="flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0"/></svg><span id="acct-label" class="text-sm font-bold text-earth max-w-[80px] truncate">دخول</span></button><button onclick="toggleCart()" aria-label="فتح السلة" class="relative flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 <span class="text-sm font-bold text-earth hidden sm:inline">السلة</span>
                 <span id="cart-badge" class="bg-sage text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-            </button>
+            </button></div>
         </div>
     </header>
 
@@ -118,10 +120,10 @@
                 </p>
             </div>
 
-            <h2 class="text-2xl sm:text-3xl font-bold text-earth max-w-2xl mx-auto leading-relaxed mt-4">
+            <h2 data-cms="hero_title" class="text-2xl sm:text-3xl font-bold text-earth max-w-2xl mx-auto leading-relaxed mt-4">
                 نعومة القطن المصري الصافي.. مصممة لراحتك في كل لحظة
             </h2>
-            <p class="text-earth-light max-w-xl mx-auto mt-3 text-base sm:text-lg leading-relaxed">
+            <p data-cms="hero_sub" class="text-earth-light max-w-xl mx-auto mt-3 text-base sm:text-lg leading-relaxed">
                 ملابس داخلية وبيزيكس قطنية 100% بخياطة ناعمة لا تسبب أي احتكاك، وتهوية مثالية تدوم طوال اليوم.
             </p>
 
@@ -146,8 +148,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-earth mb-2">قطن مصري 100%</h3>
-                    <p class="text-sm text-earth-light leading-relaxed">أجود أنواع القطن طويل التيلة لنعومة فائقة وملمس لطيف على البشرة الحساسة.</p>
+                    <h3 data-cms="f1_title" class="text-lg font-bold text-earth mb-2">قطن مصري 100%</h3>
+                    <p data-cms="f1_text" class="text-sm text-earth-light leading-relaxed">أجود أنواع القطن طويل التيلة لنعومة فائقة وملمس لطيف على البشرة الحساسة.</p>
                 </div>
                 <div class="p-6 rounded-2xl bg-cotton/50">
                     <div class="w-12 h-12 mx-auto bg-sage-light text-sage-dark rounded-xl flex items-center justify-center mb-4">
@@ -155,8 +157,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-earth mb-2">راحة بدون تيكيت مزعج</h3>
-                    <p class="text-sm text-earth-light leading-relaxed">طباعة حرارية ناعمة بدلاً من التيكيت القماشي التقليدي لمنع أي حكة أو ضيق.</p>
+                    <h3 data-cms="f2_title" class="text-lg font-bold text-earth mb-2">راحة بدون تيكيت مزعج</h3>
+                    <p data-cms="f2_text" class="text-sm text-earth-light leading-relaxed">طباعة حرارية ناعمة بدلاً من التيكيت القماشي التقليدي لمنع أي حكة أو ضيق.</p>
                 </div>
                 <div class="p-6 rounded-2xl bg-cotton/50">
                     <div class="w-12 h-12 mx-auto bg-sage-light text-sage-dark rounded-xl flex items-center justify-center mb-4">
@@ -164,8 +166,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-earth mb-2">ثبات المقاس واللون</h3>
-                    <p class="text-sm text-earth-light leading-relaxed">معالجة ضد الانكماش والوبرة لتحتفظ القطعة بشكلها ونعومتها بعد عشرات الغسلات.</p>
+                    <h3 data-cms="f3_title" class="text-lg font-bold text-earth mb-2">ثبات المقاس واللون</h3>
+                    <p data-cms="f3_text" class="text-sm text-earth-light leading-relaxed">معالجة ضد الانكماش والوبرة لتحتفظ القطعة بشكلها ونعومتها بعد عشرات الغسلات.</p>
                 </div>
             </div>
         </div>
@@ -192,6 +194,8 @@
     </section>
 
     <!-- Footer -->
+    <section id="info" class="hidden py-14 bg-white border-t border-cotton-border"><div id="info-cards" class="max-w-4xl mx-auto px-4 sm:px-6 grid gap-5 md:grid-cols-2"></div></section>
+
     <footer id="contact" class="bg-earth text-cotton py-12 mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
@@ -206,13 +210,14 @@
                     <p class="text-xs text-cotton/70 font-en">Premium Cotton Innerwear • Comfort. Everyday.</p>
                 </div>
             </div>
-            <p class="text-sm text-cotton/80 text-center">
+            <p data-cms="footer_note" class="text-sm text-cotton/80 text-center">
                 الدفع عند الاستلام متاح لجميع محافظات مصر • استبدال سهل خلال 14 يوم
             </p>
             <p class="text-xs text-cotton/60">
                 © 2026 Salis. جميع الحقوق محفوظة.
             </p>
         </div>
+        <div id="socials" class="max-w-6xl mx-auto px-4 sm:px-6 mt-8 flex flex-wrap items-center justify-center gap-3"></div>
     </footer>
 
     <!-- Slide-over Cart & Checkout Drawer -->
@@ -235,6 +240,7 @@
 
                 <form id="checkout-form" onsubmit="submitOrder(event)" class="hidden pt-6 border-t border-cotton-border space-y-4">
                     <h4 class="font-bold text-earth text-base">بيانات التوصيل (الدفع عند الاستلام)</h4>
+                    <div id="login-hint"></div>
                     <div>
                         <label class="block text-xs font-bold text-earth mb-1">الاسم بالكامل *</label>
                         <input type="text" id="cust-name" required minlength="2" maxlength="100" autocomplete="name" placeholder="مثال: أحمد محمود" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm">
@@ -247,10 +253,9 @@
                         <label class="block text-xs font-bold text-earth mb-1">المحافظة *</label>
                         <select id="cust-gov" required autocomplete="address-level1" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"><option value="">اختر المحافظة</option></select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-earth mb-1">العنوان بالتفصيل *</label>
-                        <textarea id="cust-address" required rows="2" minlength="5" maxlength="500" placeholder="المنطقة، اسم الشارع، رقم العمارة والشقة" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"></textarea>
-                    </div>
+                    <div><label class="block text-xs font-bold text-earth mb-1">المدينة / المركز *</label><select id="cust-city" required disabled class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"><option value="">اختر المحافظة الأول</option></select><input type="text" id="cust-city-txt" maxlength="80" placeholder="اكتب اسم المدينة" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm hidden"></div>
+                    <div><label class="block text-xs font-bold text-earth mb-1">المنطقة / الحي *</label><select id="cust-area" required disabled class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"><option value="">اختر المدينة الأول</option></select><input type="text" id="cust-area-txt" maxlength="80" placeholder="اكتب اسم المنطقة أو الحي" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm hidden"></div>
+                    <div><label class="block text-xs font-bold text-earth mb-1">العنوان بالتفصيل (الشارع، رقم العمارة، الدور والشقة) *</label><textarea id="cust-address" required rows="2" minlength="3" maxlength="300" placeholder="مثال: شارع النصر، عمارة 12، الدور الثالث، شقة 7" class="w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm"></textarea></div>
                     <div>
                         <label class="block text-xs font-bold text-earth mb-1">كود الخصم (اختياري)</label>
                         <div class="flex gap-2">
@@ -303,6 +308,8 @@
     </a>
 
     <!-- Toast Notification -->
+    <div id="acct-modal" class="fixed inset-0 z-[60] hidden overflow-y-auto"><div onclick="closeAccount()" class="fixed inset-0 bg-earth-dark/50"></div><div id="acct-body" class="relative mx-auto my-8 w-[92%] max-w-lg bg-white rounded-3xl shadow-2xl"></div></div>
+
     <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 bg-earth text-white px-5 py-3 rounded-xl shadow-lg text-sm font-bold transform translate-y-20 opacity-0 transition-all duration-300">
         تمت الإضافة إلى السلة ✓
     </div>
@@ -566,11 +573,12 @@
                     <div>
                         <div id="preview-${product.id}" class="h-52 rounded-2xl bg-cotton mb-5 relative overflow-hidden">
                             <div class="pv absolute inset-0 flex items-center justify-center">${previewHTML(product, currentSel)}</div>
+                            ${product.old_price > product.price ? `<span class="absolute top-4 left-0 z-10 bg-red-500 text-white text-xs font-bold pl-3 pr-4 py-1 rounded-r-full shadow">خصم ${Math.round((1 - product.price / product.old_price) * 100)}%</span>` : ''}
                             ${product.badge ? `<span class="absolute top-3 right-3 z-10 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-earth">${esc(product.badge)}</span>` : ''}
                         </div>
                         <div class="flex items-start justify-between gap-2">
                             <h3 class="text-lg font-extrabold text-earth">${esc(product.name)}</h3>
-                            <span class="text-lg font-extrabold text-sage-dark whitespace-nowrap">${product.price} ج.م</span>
+                            <span class="text-lg font-extrabold text-sage-dark whitespace-nowrap text-left">${product.old_price > product.price ? `<s class="block text-xs font-normal text-earth-light">${product.old_price} ج.م</s>` : ''}${product.price} ج.م</span>
                         </div>
                         <p class="text-xs text-earth-light mt-2 leading-relaxed">${esc(product.description)}</p>
                         <div class="mt-4">
@@ -789,6 +797,8 @@
                 return;
             }
 
+            const cityV = choiceVal('city'), areaV = choiceVal('area');
+            if (!cityV || !areaV) { errorBox.textContent = 'اختر المحافظة ثم المدينة ثم المنطقة.'; errorBox.classList.remove('hidden'); return; }
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>جاري تسجيل طلبك...</span>';
             errorBox.classList.add('hidden');
@@ -797,7 +807,8 @@
             const orderData = {
                 customer_name: document.getElementById('cust-name').value.trim(),
                 customer_phone: normalizeDigits(document.getElementById('cust-phone').value),
-                customer_address: document.getElementById('cust-address').value.trim(),
+                customer_address: `${document.getElementById('cust-address').value.trim()} — ${areaV}، ${cityV}، ${document.getElementById('cust-gov').value}`,
+                token: customerToken,
                 governorate: document.getElementById('cust-gov').value,
                 coupon_code: coupon ? coupon.code : null,
                 items: cart.map(item => ({
@@ -816,6 +827,7 @@
 
                 const { data, error } = await supabaseClient.rpc('place_order', { p: orderData });
                 if (error) throw error;
+                saveCustomerAfterOrder();
                 showOrderSuccess(data && data.id);
             } catch (err) {
                 console.error('Supabase Error:', err);
@@ -828,6 +840,10 @@
                     loadStoreData().then(() => renderProducts(document.querySelector('.filter-btn.active')?.dataset.cat || 'all'));
                 } else if (em.includes('invalid coupon')) {
                     message = 'كود الخصم لم يعد صالحاً. شيله من الخانة وجرّب تاني.';
+                    coupon = null;
+                    renderTotals();
+                } else if (em.includes('خاص بعميل')) {
+                    message = 'كود الخصم ده خاص بعميل تاني.';
                     coupon = null;
                     renderTotals();
                 } else if (em.includes('busy')) {
@@ -843,6 +859,8 @@
 
         function resetAfterOrder() {
             document.getElementById('checkout-form').reset();
+            setChoice('city', null, 'اختر المحافظة الأول'); setChoice('area', null, 'اختر المدينة الأول');
+            applyCustomerToCheckout();
             updateCartUI();
             toggleCart();
         }
@@ -865,7 +883,7 @@
                     colors = colors.map(c => ({ name: c.name, hex: c.hex || '#94B097', border: c.border || c.hex || '#D1D5DB', images: Array.isArray(c.images) ? c.images.filter(Boolean) : [] }));
                     return {
                         id: r.id, name: r.name, price: Number(r.price), description: r.description || '',
-                        badge: r.badge || '', category: r.category_id ? 'c' + r.category_id : 'none',
+                        badge: r.badge || '', old_price: r.old_price ? Number(r.old_price) : null, category: r.category_id ? 'c' + r.category_id : 'none',
                         type: KNOWN_TYPES.includes(r.type) ? r.type : 'boxer', colors,
                         sizes: Array.isArray(r.sizes) && r.sizes.length ? r.sizes : ['M', 'L', 'XL', '2XL', '3XL']
                     };
@@ -896,6 +914,8 @@
         ]).finally(() => {
             renderProducts(renderCategories());
             updateCartUI();
+            loadContent();
+            initCustomer();
         });
 
         // تحويل الأرقام العربية لإنجليزية تلقائيًا في خانة الموبايل
@@ -904,8 +924,195 @@
             phoneInput.value = normalizeDigits(phoneInput.value);
         });
 
+        /* ===== محتوى الموقع المتغير (من لوحة الأدمن) ===== */
+        const $id = id => document.getElementById(id);
+        const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+        const hex = (v, d) => /^#[0-9a-f]{3,8}$/i.test(v || '') ? v : d;
+        async function loadContent() {
+            if (!supabaseClient) return;
+            try {
+                const [c, s] = await Promise.all([
+                    supabaseClient.from('site_content').select('key,value'),
+                    supabaseClient.from('social_links').select('*').eq('active', true).order('sort')
+                ]);
+                const m = {};
+                (c.data || []).forEach(r => m[r.key] = r.value || '');
+                document.querySelectorAll('[data-cms]').forEach(el => { const v = (m[el.dataset.cms] || '').trim(); if (v) el.textContent = v; });
+                const bar = $id('announce');
+                if (m.announce_on === '1' && (m.announce_text || '').trim()) {
+                    const link = safeUrl(m.announce_link);
+                    bar.style.background = hex(m.announce_bg, '#5A5750');
+                    bar.style.color = hex(m.announce_fg, '#FFFFFF');
+                    bar.innerHTML = link ? `<a href="${esc(link)}" class="underline">${esc(m.announce_text)}</a>` : esc(m.announce_text);
+                    bar.classList.remove('hidden');
+                } else { bar.classList.add('hidden'); }
+                const cards = [['about_text', 'عن سَلِسْ'], ['policy_exchange', 'الاستبدال والاسترجاع'], ['policy_shipping', 'الشحن والتوصيل'], ['policy_payment', 'الدفع'], ['policy_extra', m.policy_extra_title || 'معلومات إضافية']].filter(([k]) => (m[k] || '').trim());
+                $id('info-cards').innerHTML = cards.map(([k, t]) => `<div class="bg-cotton rounded-2xl border border-cotton-border p-6"><h3 class="font-extrabold text-earth mb-2">${esc(t)}</h3><p class="text-sm text-earth-light leading-loose whitespace-pre-line">${esc(m[k])}</p></div>`).join('');
+                $id('info').classList.toggle('hidden', !cards.length);
+                $id('socials').innerHTML = (s.data || []).filter(x => safeUrl(x.url)).map(x => `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer" style="background:${hex(x.color, '#6F8F73')}" class="px-5 py-2.5 rounded-full text-white text-sm font-bold shadow-sm hover:opacity-90 transition-opacity">${esc(x.name)}</a>`).join('');
+            } catch (e) { console.error('content load failed', e); }
+        }
+
+        /* ===== العنوان المتسلسل: المحافظة > المدينة > المنطقة ===== */
+        const cityCache = {}, areaCache = {};
+        function setChoice(key, items, ph, keep) {
+            const s = $id('cust-' + key), t = $id('cust-' + key + '-txt');
+            if (items === null) {
+                s.innerHTML = `<option value="">${ph}</option>`; s.disabled = true; s.required = true;
+                s.classList.remove('hidden'); t.classList.add('hidden'); t.required = false; t.value = '';
+            } else if (items.length) {
+                s.innerHTML = `<option value="">${ph}</option>` + items.map(x => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
+                s.disabled = false; s.required = true; s.classList.remove('hidden'); t.classList.add('hidden'); t.required = false;
+                if (keep) s.value = keep;
+            } else {
+                s.classList.add('hidden'); s.required = false; t.classList.remove('hidden'); t.required = true;
+                if (keep) t.value = keep;
+            }
+        }
+        const choiceVal = key => { const s = $id('cust-' + key), t = $id('cust-' + key + '-txt'); return (s.classList.contains('hidden') ? t.value : s.value).trim(); };
+        async function getCities(gov) {
+            if (cityCache[gov]) return cityCache[gov];
+            try {
+                const { data, error } = await supabaseClient.from('eg_cities').select('id,name').eq('governorate', gov).order('name');
+                if (error) throw error;
+                return (cityCache[gov] = data || []);
+            } catch (e) { return []; }
+        }
+        async function getAreas(cityId) {
+            if (areaCache[cityId]) return areaCache[cityId];
+            try {
+                const { data, error } = await supabaseClient.from('eg_areas').select('id,name').eq('city_id', cityId).order('name');
+                if (error) throw error;
+                return (areaCache[cityId] = data || []);
+            } catch (e) { return []; }
+        }
+        async function onGov(keepCity, keepArea) {
+            const gov = $id('cust-gov').value;
+            setChoice('area', null, 'اختر المدينة الأول');
+            if (!gov) { setChoice('city', null, 'اختر المحافظة الأول'); return; }
+            setChoice('city', null, 'جاري التحميل…');
+            const rows = await getCities(gov);
+            setChoice('city', rows, 'اختر المدينة / المركز', keepCity);
+            if (!rows.length) { setChoice('area', [], '', keepArea); return; }
+            if (keepCity) await onCity(keepArea);
+        }
+        async function onCity(keepArea) {
+            const gov = $id('cust-gov').value, city = choiceVal('city');
+            setChoice('area', null, 'اختر المنطقة');
+            if (!city) return;
+            const c = (cityCache[gov] || []).find(x => x.name === city);
+            setChoice('area', c ? await getAreas(c.id) : [], 'اختر المنطقة / الحي', keepArea);
+        }
+
+        /* ===== حساب العميل (اختياري) ===== */
+        let customerToken = null, customer = null, custData = null;
+        try { customerToken = localStorage.getItem('salis_ct'); } catch (e) {}
+        const keepToken = t => { customerToken = t; try { t ? localStorage.setItem('salis_ct', t) : localStorage.removeItem('salis_ct'); } catch (e) {} };
+        const ST_AR = { new: 'تم استلام الطلب', confirmed: 'تم التأكيد', shipped: 'خرج للشحن', delivered: 'تم التسليم', cancelled: 'ملغي' };
+        const ST_FLOW = ['new', 'confirmed', 'shipped', 'delivered'];
+        const fmtDate = d => d ? new Date(d).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+        const INP = 'w-full px-4 py-2.5 rounded-xl bg-cotton border border-cotton-border focus:border-sage focus:outline-none text-sm';
+
+        async function initCustomer() { if (customerToken) await refreshCustomer(); else renderAcctBtn(); applyCustomerToCheckout(); }
+        async function refreshCustomer() {
+            try {
+                const { data, error } = await supabaseClient.rpc('customer_me', { t: customerToken });
+                if (error) throw error;
+                if (!data) { keepToken(null); custData = null; customer = null; }
+                else { custData = data; customer = data.profile; }
+            } catch (e) { console.error('customer_me failed', e); }
+            renderAcctBtn(); applyCustomerToCheckout();
+        }
+        function renderAcctBtn() {
+            const l = $id('acct-label');
+            if (l) l.textContent = customer ? customer.name.split(' ')[0] : 'دخول';
+        }
+        function applyCustomerToCheckout() {
+            const hint = $id('login-hint');
+            if (!customer) {
+                hint.innerHTML = `<button type="button" onclick="openAccount()" class="text-xs font-bold text-sage-dark underline">عندك حساب؟ سجّل دخول عشان بياناتك تتحفظ (اختياري)</button>`;
+                return;
+            }
+            hint.innerHTML = `<span class="text-xs font-bold text-sage-dark">✔ داخل بحساب ${esc(customer.name)} (${esc(customer.code)}) — بياناتك اتعبّت تلقائي</span>`;
+            if (!$id('cust-name').value) $id('cust-name').value = customer.name;
+            if (!$id('cust-phone').value) $id('cust-phone').value = customer.phone;
+            if (customer.governorate && !$id('cust-gov').value) {
+                $id('cust-gov').value = customer.governorate;
+                $id('cust-address').value = customer.address_details || '';
+                onGov(customer.city, customer.area).then(renderTotals);
+            }
+        }
+        function saveCustomerAfterOrder() {
+            if (!customer || !customerToken) return;
+            supabaseClient.rpc('customer_update', { t: customerToken, p: { name: $id('cust-name').value.trim(), governorate: $id('cust-gov').value, city: choiceVal('city'), area: choiceVal('area'), address_details: $id('cust-address').value.trim() } })
+                .then(() => refreshCustomer()).catch(() => {});
+        }
+
+        function openAccount() { $id('acct-modal').classList.remove('hidden'); customer ? drawAccount() : drawAuth('login'); }
+        function closeAccount() { $id('acct-modal').classList.add('hidden'); }
+        function drawAuth(mode, msg) {
+            const tab = (m, l) => `<button onclick="drawAuth('${m}')" class="flex-1 py-2 rounded-full text-sm font-bold ${mode === m ? 'bg-earth text-white' : 'bg-cotton text-earth'}">${l}</button>`;
+            $id('acct-body').innerHTML = `<div class="p-6 space-y-4">
+                <div class="flex items-center justify-between"><h3 class="text-xl font-extrabold text-earth">حسابي</h3><button onclick="closeAccount()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div>
+                <p class="text-xs text-earth-light">الحساب اختياري — تقدر تطلب من غير تسجيل. الحساب بيحفظ بياناتك وبيورّيك كل طلباتك وحالتها.</p>
+                <div class="flex gap-2">${tab('login', 'تسجيل الدخول')}${tab('register', 'حساب جديد')}</div>
+                ${mode === 'register' ? `<div><label class="block text-xs font-bold text-earth mb-1">الاسم ثلاثي *</label><input id="ac-name" class="${INP}" placeholder="مثال: أحمد محمد علي" maxlength="100" autocomplete="name"></div>` : ''}
+                <div><label class="block text-xs font-bold text-earth mb-1">رقم الموبايل *</label><input id="ac-phone" type="tel" inputmode="numeric" maxlength="11" dir="ltr" class="${INP}" placeholder="010xxxxxxxx" autocomplete="tel"></div>
+                <div><label class="block text-xs font-bold text-earth mb-1">كلمة السر * ${mode === 'register' ? '(6 خانات على الأقل)' : ''}</label><input id="ac-pw" type="password" dir="ltr" class="${INP}" autocomplete="${mode === 'login' ? 'current-password' : 'new-password'}"></div>
+                <p id="ac-err" class="text-xs font-bold text-red-600 ${msg ? '' : 'hidden'}">${esc(msg || '')}</p>
+                <button id="ac-go" onclick="${mode === 'login' ? 'doLogin()' : 'doRegister()'}" class="w-full bg-sage hover:bg-sage-dark text-white font-bold py-3 rounded-xl">${mode === 'login' ? 'دخول' : 'إنشاء الحساب'}</button>
+                ${mode === 'login' ? '<p class="text-xs text-earth-light text-center">نسيت كلمة السر؟ كلمنا واتساب وهنعيّن لك واحدة جديدة.</p>' : ''}</div>`;
+        }
+        const acErr = m => { const e = $id('ac-err'); e.textContent = m; e.classList.remove('hidden'); };
+        async function authCall(fn, args) {
+            const b = $id('ac-go'); b.disabled = true;
+            try {
+                const { data, error } = await supabaseClient.rpc(fn, args);
+                if (error) throw error;
+                if (data && data.error) { acErr(data.error); return; }
+                keepToken(data.token);
+                await refreshCustomer();
+                drawAccount();
+            } catch (e) { acErr(((e && e.message) || '').match(/[\u0600-\u06FF]/) ? e.message : 'حصل خطأ، جرّب تاني'); }
+            finally { b.disabled = false; }
+        }
+        function doLogin() { authCall('customer_login', { p_phone: normalizeDigits($id('ac-phone').value), p_password: $id('ac-pw').value }); }
+        function doRegister() { authCall('customer_register', { p: { name: $id('ac-name').value, phone: normalizeDigits($id('ac-phone').value), password: $id('ac-pw').value } }); }
+        async function doLogout() {
+            try { await supabaseClient.rpc('customer_logout', { t: customerToken }); } catch (e) {}
+            keepToken(null); customer = null; custData = null; renderAcctBtn(); applyCustomerToCheckout(); closeAccount();
+        }
+        function useCoupon(code) { closeAccount(); $id('coupon-input').value = code; if (cart.length) { if ($id('cart-drawer').classList.contains('hidden')) toggleCart(); applyCoupon(); } else { showToast('ضيف منتجات للسلة وبعدين اطبّق الكود: ' + code); } }
+        function timeline(o) {
+            if (o.status === 'cancelled') return '<p class="text-xs font-bold text-red-600">الطلب ده اتلغى</p>';
+            const ix = ST_FLOW.indexOf(o.status), dates = [o.created_at, o.confirmed_at, o.shipped_at, o.delivered_at];
+            return `<ol class="space-y-2 my-3">${ST_FLOW.map((s, i) => `<li class="flex items-center gap-3 text-xs"><span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${i <= ix ? 'bg-sage text-white' : 'bg-cotton border border-cotton-border text-earth-light'}">${i <= ix ? '✓' : i + 1}</span><span class="${i <= ix ? 'font-bold text-earth' : 'text-earth-light'}">${ST_AR[s]}</span><span class="text-earth-light mr-auto">${fmtDate(dates[i])}</span></li>`).join('')}</ol>`;
+        }
+        function orderCard(o) {
+            return `<div class="border border-cotton-border rounded-2xl p-4 bg-white"><button class="w-full text-right" onclick="this.nextElementSibling.classList.toggle('hidden')"><div class="flex items-center justify-between gap-2"><b class="font-en text-earth">${orderCode(o.id)}</b><span class="text-xs font-bold px-3 py-0.5 rounded-full bg-sage-light text-sage-dark">${ST_AR[o.status] || esc(o.status)}</span></div><div class="flex justify-between text-xs text-earth-light mt-1"><span>${fmtDate(o.created_at)}</span><b class="text-earth">${o.total_amount} ج.م</b></div></button>
+            <div class="hidden mt-3 pt-3 border-t border-dashed border-cotton-border text-xs text-earth">${timeline(o)}
+            ${(o.items || []).map(i => `<div class="flex justify-between py-0.5"><span>${esc(i.name)} — ${esc(i.size)}${i.color ? ' / ' + esc(i.color) : ''} × ${i.qty}</span><span>${i.price * i.qty} ج.م</span></div>`).join('')}
+            ${o.discount ? `<div class="flex justify-between text-sage-dark font-bold"><span>خصم ${esc(o.coupon_code || '')}</span><span>-${o.discount} ج.م</span></div>` : ''}
+            <div class="flex justify-between"><span>الشحن</span><span>${o.shipping_fee ? o.shipping_fee + ' ج.م' : 'مجاني'}</span></div>
+            <p class="mt-2 text-earth-light">📍 ${esc(o.customer_address)}</p></div></div>`;
+        }
+        function drawAccount() {
+            if (!customer) return drawAuth('login');
+            const os = custData.orders || [], live = os.filter(o => ['new', 'confirmed', 'shipped'].includes(o.status)), done = os.filter(o => !['new', 'confirmed', 'shipped'].includes(o.status));
+            const cps = custData.coupons || [];
+            $id('acct-body').innerHTML = `<div class="p-6 space-y-5">
+                <div class="flex items-start justify-between"><div><h3 class="text-xl font-extrabold text-earth">${esc(customer.name)}</h3><p class="text-xs text-earth-light mt-1"><span class="font-en font-bold">${esc(customer.code)}</span> • <span dir="ltr">${esc(customer.phone)}</span></p></div><button onclick="closeAccount()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div>
+                <div class="grid grid-cols-2 gap-3 text-center"><div class="bg-sage-light rounded-2xl p-3"><b class="text-xl text-earth">${os.filter(o => o.status !== 'cancelled').length}</b><p class="text-xs text-earth-light">طلباتك</p></div><div class="bg-sage-light rounded-2xl p-3"><b class="text-xl text-earth">${live.length}</b><p class="text-xs text-earth-light">في الطريق ليك</p></div></div>
+                ${cps.length ? `<div><h4 class="font-bold text-earth text-sm mb-2">🎁 كوبوناتك الخاصة</h4>${cps.map(c => `<div class="flex items-center justify-between bg-cotton border border-dashed border-sage rounded-xl px-4 py-2 mb-2"><div><b class="font-en tracking-wider">${esc(c.code)}</b><p class="text-xs text-earth-light">خصم ${c.value}${c.kind === 'percent' ? '%' : ' ج.م'}${c.expires_at ? ' • لحد ' + fmtDate(c.expires_at) : ''}</p></div><button onclick="useCoupon('${esc(c.code)}')" class="px-4 py-1.5 bg-earth text-white text-xs font-bold rounded-full">استخدم</button></div>`).join('')}</div>` : ''}
+                <div class="text-xs text-earth bg-cotton rounded-2xl p-4"><b>عنوانك المحفوظ</b><p class="text-earth-light mt-1">${customer.governorate ? esc([customer.address_details, customer.area, customer.city, customer.governorate].filter(Boolean).join('، ')) : 'لسه مفيش عنوان — هيتحفظ تلقائي مع أول طلب ليك وانت داخل بحسابك.'}</p></div>
+                ${live.length ? `<div><h4 class="font-bold text-earth text-sm mb-2">🚚 طلبات جارية</h4><div class="space-y-2">${live.map(orderCard).join('')}</div></div>` : ''}
+                <div><h4 class="font-bold text-earth text-sm mb-2">كل طلباتك</h4><div class="space-y-2">${done.map(orderCard).join('') || (live.length ? '' : '<p class="text-xs text-earth-light">لسه مفيش طلبات.</p>')}</div></div>
+                <button onclick="doLogout()" class="w-full border border-cotton-border text-earth font-bold py-2.5 rounded-xl text-sm">تسجيل الخروج</button></div>`;
+        }
+
         fillGovs(GOVS.map(g => ({ governorate: g })));
-        document.getElementById('cust-gov').addEventListener('change', renderTotals);
+        document.getElementById('cust-gov').addEventListener('change', () => { renderTotals(); onGov(); });
+        document.getElementById('cust-city').addEventListener('change', () => onCity());
         document.getElementById('coupon-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
         // إغلاق السلة بزرار Esc
