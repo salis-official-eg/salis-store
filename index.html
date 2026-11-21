@@ -95,7 +95,7 @@
                 <a href="#contact" class="text-earth hover:text-sage-dark transition-colors">تواصل معنا</a>
             </nav>
 
-            <div class="flex items-center gap-2"><button onclick="openAccount()" aria-label="حسابي" class="flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0"/></svg><span id="acct-label" class="text-sm font-bold text-earth max-w-[80px] truncate">دخول</span></button><button onclick="toggleCart()" aria-label="فتح السلة" class="relative flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all">
+            <div class="flex items-center gap-2"><button id="orders-btn" onclick="openOrders()" aria-label="طلباتي" class="hidden items-center gap-2 bg-white border border-cotton-border hover:border-sage px-3 sm:px-4 py-2.5 rounded-full shadow-sm transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span class="text-sm font-bold text-earth hidden sm:inline">طلباتي</span></button><button onclick="openAccount()" aria-label="حسابي" class="flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0"/></svg><span id="acct-label" class="text-sm font-bold text-earth max-w-[80px] truncate">دخول</span></button><button onclick="toggleCart()" aria-label="فتح السلة" class="relative flex items-center gap-2 bg-white border border-cotton-border hover:border-sage px-4 py-2.5 rounded-full shadow-sm transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-earth" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
@@ -308,6 +308,8 @@
     </a>
 
     <!-- Toast Notification -->
+    <div id="order-page" class="fixed inset-0 z-[55] hidden overflow-y-auto bg-cotton" role="dialog" aria-modal="true" aria-label="طلباتي"><div id="op-body"></div></div>
+
     <div id="acct-modal" class="fixed inset-0 z-[60] hidden overflow-y-auto"><div onclick="closeAccount()" class="fixed inset-0 bg-earth-dark/50"></div><div id="acct-body" class="relative mx-auto my-8 w-[92%] max-w-lg bg-white rounded-3xl shadow-2xl"></div></div>
 
     <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 bg-earth text-white px-5 py-3 rounded-xl shadow-lg text-sm font-bold transform translate-y-20 opacity-0 transition-all duration-300">
@@ -829,6 +831,7 @@
                 if (error) throw error;
                 saveCustomerAfterOrder();
                 showOrderSuccess(data && data.id);
+                if (data && data.token) { resetAfterOrder(); openOrderPage({ token: data.token, fresh: true }); }
             } catch (err) {
                 console.error('Supabase Error:', err);
                 let message = 'حدث خطأ أثناء إرسال الطلب، تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
@@ -1026,6 +1029,8 @@
         function renderAcctBtn() {
             const l = $id('acct-label');
             if (l) l.textContent = customer ? customer.name.split(' ')[0] : 'دخول';
+            const ob = $id('orders-btn');
+            if (ob) { ob.classList.toggle('hidden', !customer); ob.classList.toggle('flex', !!customer); }
         }
         function applyCustomerToCheckout() {
             const hint = $id('login-hint');
@@ -1103,12 +1108,164 @@
             $id('acct-body').innerHTML = `<div class="p-6 space-y-5">
                 <div class="flex items-start justify-between"><div><h3 class="text-xl font-extrabold text-earth">${esc(customer.name)}</h3><p class="text-xs text-earth-light mt-1"><span class="font-en font-bold">${esc(customer.code)}</span> • <span dir="ltr">${esc(customer.phone)}</span></p></div><button onclick="closeAccount()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div>
                 <div class="grid grid-cols-2 gap-3 text-center"><div class="bg-sage-light rounded-2xl p-3"><b class="text-xl text-earth">${os.filter(o => o.status !== 'cancelled').length}</b><p class="text-xs text-earth-light">طلباتك</p></div><div class="bg-sage-light rounded-2xl p-3"><b class="text-xl text-earth">${live.length}</b><p class="text-xs text-earth-light">في الطريق ليك</p></div></div>
+                <button onclick="closeAccount(); openOrders()" class="w-full bg-earth text-white font-bold py-3 rounded-xl text-sm">📦 تتبّع طلباتي</button>
                 ${cps.length ? `<div><h4 class="font-bold text-earth text-sm mb-2">🎁 كوبوناتك الخاصة</h4>${cps.map(c => `<div class="flex items-center justify-between bg-cotton border border-dashed border-sage rounded-xl px-4 py-2 mb-2"><div><b class="font-en tracking-wider">${esc(c.code)}</b><p class="text-xs text-earth-light">خصم ${c.value}${c.kind === 'percent' ? '%' : ' ج.م'}${c.expires_at ? ' • لحد ' + fmtDate(c.expires_at) : ''}</p></div><button onclick="useCoupon('${esc(c.code)}')" class="px-4 py-1.5 bg-earth text-white text-xs font-bold rounded-full">استخدم</button></div>`).join('')}</div>` : ''}
                 <div class="text-xs text-earth bg-cotton rounded-2xl p-4"><b>عنوانك المحفوظ</b><p class="text-earth-light mt-1">${customer.governorate ? esc([customer.address_details, customer.area, customer.city, customer.governorate].filter(Boolean).join('، ')) : 'لسه مفيش عنوان — هيتحفظ تلقائي مع أول طلب ليك وانت داخل بحسابك.'}</p></div>
                 ${live.length ? `<div><h4 class="font-bold text-earth text-sm mb-2">🚚 طلبات جارية</h4><div class="space-y-2">${live.map(orderCard).join('')}</div></div>` : ''}
                 <div><h4 class="font-bold text-earth text-sm mb-2">كل طلباتك</h4><div class="space-y-2">${done.map(orderCard).join('') || (live.length ? '' : '<p class="text-xs text-earth-light">لسه مفيش طلبات.</p>')}</div></div>
                 <button onclick="doLogout()" class="w-full border border-cotton-border text-earth font-bold py-2.5 rounded-xl text-sm">تسجيل الخروج</button></div>`;
         }
+
+
+        /* ===== صفحة الطلب / متابعة الحالة ===== */
+        const SUPPORT_WA = '201096620386';
+        const LOGO_SVG = '<svg viewBox="0 0 100 100" class="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 35C44 27 36 23 29 26C22 29 22 39 29 44C36 49 46 53 45 63C44 72 34 76 26 73C19 70 18 63 21 58" stroke="#94B097" stroke-width="9" stroke-linecap="round"/><path d="M45 55C58 52 72 41 72 26C72 16 63 13 57 20C50 28 49 52 60 66C68 75 79 71 85 63" stroke="#94B097" stroke-width="9" stroke-linecap="round"/></svg>';
+        const OP = { token: null, order: null, mode: 'list', edit: false, cancel: false, busy: false, fresh: false, msg: null, form: null, loading: false, failed: false, timer: null };
+        const supportLink = o => 'https://wa.me/' + SUPPORT_WA + '?text=' + encodeURIComponent(o ? 'أهلاً سَلِسْ، عندي استفسار بخصوص طلبي ' + orderCode(o.id) : 'أهلاً سَلِسْ، عندي استفسار');
+        const fmtShort = d => d ? new Date(d).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }) : '';
+        const BTN = 'w-full font-bold py-3 rounded-xl text-sm transition-all disabled:opacity-50';
+
+        function opChip(st) {
+            const c = st === 'cancelled' ? 'bg-red-50 text-red-600' : st === 'delivered' ? 'bg-sage text-white' : 'bg-sage-light text-sage-dark';
+            return `<span class="text-xs font-bold px-3 py-1 rounded-full ${c}">${ST_AR[st] || esc(st)}</span>`;
+        }
+        function opSteps(o) {
+            if (o.status === 'cancelled') return '<div class="text-sm font-bold text-red-600 bg-red-50 rounded-2xl px-4 py-3 text-center">الطلب ده اتلغى</div>';
+            const ix = ST_FLOW.indexOf(o.status), dates = [o.created_at, o.confirmed_at, o.shipped_at, o.delivered_at];
+            return `<div class="flex items-start">${ST_FLOW.map((s, i) => `<div class="flex-1 flex flex-col items-center text-center relative">
+                ${i > 0 ? `<span class="absolute top-3 left-1/2 w-full h-0.5 ${i <= ix ? 'bg-sage' : 'bg-cotton-border'}"></span>` : ''}
+                <span class="relative z-[1] w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${i <= ix ? 'bg-sage text-white' : 'bg-white border-2 border-cotton-border text-earth-light'}">${i <= ix ? '✓' : i + 1}</span>
+                <span class="mt-2 text-[11px] leading-tight ${i <= ix ? 'font-bold text-earth' : 'text-earth-light'}">${ST_AR[s]}</span>
+                <span class="text-[10px] text-earth-light/80 mt-0.5">${fmtShort(dates[i])}</span></div>`).join('')}</div>`;
+        }
+        function opSummary(o) {
+            const items = (o.items || []).map(i => `<div class="flex justify-between gap-3 py-1.5 text-sm"><span class="text-earth">${esc(i.name)} <span class="text-earth-light text-xs">— ${esc(i.size)}${i.color ? ' / ' + esc(i.color) : ''} × ${i.qty}</span></span><span class="font-bold text-earth whitespace-nowrap">${i.price * i.qty} ج.م</span></div>`).join('');
+            return `<div class="divide-y divide-dashed divide-cotton-border">${items}</div>
+                <div class="mt-3 pt-3 border-t border-cotton-border space-y-1 text-sm">
+                    ${o.discount ? `<div class="flex justify-between text-sage-dark font-bold"><span>خصم ${esc(o.coupon_code || '')}</span><span>-${o.discount} ج.م</span></div>` : ''}
+                    <div class="flex justify-between text-earth-light"><span>الشحن</span><span>${o.shipping_fee ? o.shipping_fee + ' ج.م' : 'مجاني'}</span></div>
+                    <div class="flex justify-between text-base font-extrabold text-earth"><span>الإجمالي (الدفع عند الاستلام)</span><span class="text-sage-dark">${o.total_amount} ج.م</span></div>
+                </div>`;
+        }
+        function opActions(o) {
+            const msg = OP.msg ? `<p class="text-xs font-bold rounded-xl px-3 py-2 mb-3 ${OP.msg.t === 'ok' ? 'bg-sage-light text-sage-dark' : 'bg-red-50 text-red-600'}">${esc(OP.msg.m)}</p>` : '';
+            const card = inner => `<div class="bg-white rounded-3xl border border-cotton-border p-5 shadow-sm">${msg}${inner}</div>`;
+            if (o.status === 'cancelled') return OP.msg ? card('') : '';
+            if (o.status === 'shipped') return card('<p class="text-sm text-earth text-center font-bold">🚚 طلبك خرج للشحن ومتجهّز يوصلك قريب. لأي تعديل كلّم الدعم.</p>');
+            if (o.status === 'delivered') return card('<p class="text-sm text-earth text-center font-bold">تم تسليم طلبك — نتمنى القطن يعجبك 🌿</p>');
+            const f = OP.form || {};
+            if (OP.edit) return card(`<h3 class="font-extrabold text-earth mb-1">تعديل بيانات التوصيل</h3>
+                <p class="text-xs text-earth-light mb-3">لتغيير المنتجات أو المحافظة كلّم الدعم.</p>
+                <div class="space-y-3">
+                    <div><label class="block text-xs font-bold text-earth mb-1">الاسم</label><input id="op-name" maxlength="100" value="${esc(f.name ?? o.customer_name)}" class="${INP}"></div>
+                    <div><label class="block text-xs font-bold text-earth mb-1">رقم الموبايل</label><input id="op-phone" type="tel" inputmode="numeric" maxlength="11" dir="ltr" value="${esc(f.phone ?? o.customer_phone)}" class="${INP}"></div>
+                    <div><label class="block text-xs font-bold text-earth mb-1">العنوان بالتفصيل</label><textarea id="op-addr" rows="3" maxlength="400" class="${INP}">${esc(f.address ?? o.customer_address)}</textarea></div>
+                    <div class="grid grid-cols-2 gap-2"><button ${OP.busy ? 'disabled' : ''} onclick="opSaveEdit()" class="${BTN} bg-sage hover:bg-sage-dark text-white">حفظ التعديل</button><button onclick="opToggle('edit', false)" class="${BTN} border border-cotton-border text-earth bg-white">رجوع</button></div>
+                </div>`);
+            if (OP.cancel) return card(`<h3 class="font-extrabold text-earth mb-1">إلغاء الطلب</h3>
+                <p class="text-xs text-earth-light mb-3">متأكد إنك عايز تلغي الطلب ${orderCode(o.id)}؟</p>
+                <textarea id="op-reason" rows="2" maxlength="300" placeholder="سبب الإلغاء (اختياري)" class="${INP} mb-3"></textarea>
+                <div class="grid grid-cols-2 gap-2"><button ${OP.busy ? 'disabled' : ''} onclick="opSaveCancel()" class="${BTN} bg-red-600 hover:bg-red-700 text-white">أيوه، إلغاء</button><button onclick="opToggle('cancel', false)" class="${BTN} border border-cotton-border text-earth bg-white">رجوع</button></div>`);
+            const secondary = `<div class="grid grid-cols-2 gap-2"><button onclick="opToggle('edit', true)" class="${BTN} border border-cotton-border text-earth bg-white hover:border-sage">✎ تعديل البيانات</button><button onclick="opToggle('cancel', true)" class="${BTN} border border-cotton-border text-red-600 bg-white hover:border-red-300">✕ إلغاء الطلب</button></div>`;
+            if (o.status === 'confirmed') return card(`<p class="text-sm text-earth text-center font-bold mb-3">✓ طلبك مؤكد وبنجهّزه للشحن</p>${secondary}`);
+            return card(`<h3 class="font-extrabold text-earth mb-1">تأكيد الطلب</h3>
+                <p class="text-xs text-earth-light mb-4">راجع البيانات فوق، واختار:${o.customer_response === 'edited' ? ' <b class="text-sage-dark">(اتعدّلت بياناتك)</b>' : ''}</p>
+                <button ${OP.busy ? 'disabled' : ''} onclick="opAct('confirm')" class="${BTN} bg-sage hover:bg-sage-dark text-white mb-2 shadow-md">✓ تأكيد الطلب</button>${secondary}`);
+        }
+        function opDetail(o) {
+            const first = (o.customer_name || '').split(' ')[0];
+            return `${OP.fresh ? `<div class="text-center pt-2 pb-1"><div class="w-14 h-14 bg-sage-light text-sage-dark rounded-full flex items-center justify-center mx-auto mb-3"><svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><h2 class="text-xl font-extrabold text-earth">شكراً يا ${esc(first)}، استلمنا طلبك 🌿</h2><p class="text-sm text-earth-light mt-1">أكّد طلبك من تحت عشان نبدأ نجهّزه.</p></div>` : ''}
+                <div class="bg-white rounded-3xl border border-cotton-border p-5 shadow-sm">
+                    <div class="flex items-center justify-between"><div><p class="text-[11px] text-earth-light">رقم الطلب</p><b class="font-en text-lg tracking-wider text-earth">${orderCode(o.id)}</b></div>${opChip(o.status)}</div>
+                    <div class="my-5">${opSteps(o)}</div>
+                    ${opSummary(o)}
+                </div>
+                <div class="bg-white rounded-3xl border border-cotton-border p-5 shadow-sm text-sm space-y-2">
+                    <h3 class="font-extrabold text-earth mb-1">بيانات التوصيل</h3>
+                    <p class="flex gap-2"><span class="text-earth-light w-16 shrink-0">الاسم</span><b class="text-earth">${esc(o.customer_name)}</b></p>
+                    <p class="flex gap-2"><span class="text-earth-light w-16 shrink-0">الموبايل</span><b class="text-earth" dir="ltr">${esc(o.customer_phone)}</b></p>
+                    <p class="flex gap-2"><span class="text-earth-light w-16 shrink-0">العنوان</span><span class="text-earth">${esc(o.customer_address)}</span></p>
+                </div>
+                ${opActions(o)}`;
+        }
+        function opList() {
+            const os = (custData && custData.orders) || [];
+            if (!os.length) return `<div class="text-center py-16"><p class="font-bold text-earth">لسه مفيش طلبات</p><p class="text-xs text-earth-light mt-1">أول ما تطلب هتلاقي حالته هنا.</p><button onclick="closeOrderPage(); location.hash='#products'" class="mt-5 px-6 py-2.5 bg-sage text-white text-sm font-bold rounded-full">تسوّق دلوقتي</button></div>`;
+            return `<h2 class="text-lg font-extrabold text-earth">طلباتك</h2><div class="space-y-3">${os.map(o => `<button onclick="opOpen(${o.id})" class="w-full text-right bg-white rounded-2xl border border-cotton-border hover:border-sage p-4 shadow-sm transition-all"><div class="flex items-center justify-between"><b class="font-en tracking-wider text-earth">${orderCode(o.id)}</b>${opChip(o.status)}</div><div class="flex justify-between text-xs text-earth-light mt-2"><span>${fmtDate(o.created_at)}</span><b class="text-earth">${o.total_amount} ج.م</b></div></button>`).join('')}</div>`;
+        }
+        function opDraw() {
+            const o = OP.order, inDetail = OP.mode === 'detail';
+            const back = inDetail && !OP.token ? '<button onclick="opBack()" class="p-2 text-earth-light" aria-label="رجوع">→</button>' : '';
+            let body;
+            if (OP.loading) body = '<p class="text-center text-sm text-earth-light py-16">جاري التحميل...</p>';
+            else if (OP.failed) body = '<p class="text-center text-sm text-red-600 font-bold py-16">حصل خطأ في التحميل، جرّب تاني.</p>';
+            else if (inDetail && !o) body = '<p class="text-center text-sm text-earth-light py-16">الرابط ده مش صحيح أو الطلب مش موجود.</p>';
+            else body = inDetail ? opDetail(o) : opList();
+            $id('op-body').innerHTML = `<div class="sticky top-0 z-10 bg-cotton/90 backdrop-blur-md border-b border-cotton-border"><div class="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
+                    <div class="flex items-center gap-2">${back}<div class="w-9 h-9 rounded-xl bg-sage-light flex items-center justify-center">${LOGO_SVG}</div><div class="leading-tight"><b class="block text-earth">${inDetail ? 'طلبك' : 'طلباتي'}</b><span class="text-[10px] font-en font-semibold text-sage-dark tracking-wider">SALIS</span></div></div>
+                    <button onclick="closeOrderPage()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div></div>
+                <div class="max-w-lg mx-auto px-4 py-6 space-y-4">${body}
+                    <a href="${supportLink(o)}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 bg-[#25D366] hover:brightness-95 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all"><svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2z"/></svg>تواصل مع الدعم على واتساب</a>
+                    <p class="text-center text-[11px] text-earth-light">لو عندك أي مشكلة أو استفسار بخصوص الطلب كلّمنا.</p></div>`;
+        }
+        function opShow() { $id('order-page').classList.remove('hidden'); document.body.style.overflow = 'hidden'; clearInterval(OP.timer); OP.timer = setInterval(opRefresh, 20000); }
+        function opReset(token, fresh) { Object.assign(OP, { token, fresh: !!fresh, order: null, edit: false, cancel: false, busy: false, msg: null, form: null, failed: false }); }
+        async function openOrderPage(opts) {
+            opts = opts || {};
+            opReset(opts.token || null, opts.fresh); OP.mode = 'detail'; OP.loading = true; opShow(); opDraw();
+            try { const { data, error } = await supabaseClient.rpc('order_view', { p_token: OP.token }); if (error) throw error; OP.order = data || null; }
+            catch (e) { console.error(e); OP.failed = true; }
+            OP.loading = false; opDraw();
+        }
+        async function openOrders() {
+            if (!customer) { openAccount(); return; }
+            opReset(null, false); OP.mode = 'list'; OP.loading = false; opShow(); opDraw();
+            await refreshCustomer(); opDraw();
+        }
+        function opOpen(id) { OP.order = ((custData && custData.orders) || []).find(o => o.id === id) || null; OP.mode = 'detail'; OP.edit = OP.cancel = false; OP.msg = null; OP.form = null; opDraw(); $id('order-page').scrollTo(0, 0); }
+        function opBack() { OP.mode = 'list'; OP.order = null; OP.edit = OP.cancel = false; OP.msg = null; opDraw(); }
+        function closeOrderPage() {
+            $id('order-page').classList.add('hidden'); document.body.style.overflow = ''; clearInterval(OP.timer);
+            if (location.hash.startsWith('#o=')) history.replaceState(null, '', location.pathname + location.search);
+        }
+        function opToggle(k, v) { OP[k] = v; OP.msg = null; if (k === 'edit') OP.form = null; if (v) OP[k === 'edit' ? 'cancel' : 'edit'] = false; opDraw(); }
+        async function opRefresh() {
+            if (document.hidden || OP.busy || OP.edit || OP.cancel || OP.loading || $id('order-page').classList.contains('hidden')) return;
+            try {
+                if (OP.token) { const { data } = await supabaseClient.rpc('order_view', { p_token: OP.token }); if (data) OP.order = data; }
+                else if (customer) { await refreshCustomer(); if (OP.order) OP.order = custData.orders.find(o => o.id === OP.order.id) || OP.order; }
+                opDraw();
+            } catch (e) {}
+        }
+        async function opAct(action, payload) {
+            if (OP.busy || !OP.order) return;
+            OP.busy = true; OP.msg = null; if (payload) OP.form = payload; opDraw();
+            try {
+                const { data, error } = OP.token
+                    ? await supabaseClient.rpc('order_respond', { p_token: OP.token, p_action: action, p: payload || {} })
+                    : await supabaseClient.rpc('customer_order_respond', { t: customerToken, p_id: OP.order.id, p_action: action, p: payload || {} });
+                if (error) throw error;
+                if (data.order) OP.order = data.order;
+                if (data.error) OP.msg = { t: 'err', m: data.error };
+                else {
+                    OP.msg = { t: 'ok', m: { confirm: 'تم تأكيد طلبك ✓ شكراً ليك', cancel: 'تم إلغاء الطلب', edit: 'اتحفظ التعديل ✓ لو البيانات تمام اضغط تأكيد الطلب' }[action] };
+                    OP.edit = OP.cancel = false; OP.form = null; OP.fresh = false;
+                    if (customerToken) refreshCustomer();
+                }
+            } catch (e) { console.error(e); OP.msg = { t: 'err', m: 'حصل خطأ، جرّب تاني' }; }
+            OP.busy = false; opDraw();
+        }
+        function opSaveEdit() {
+            const v = { name: $id('op-name').value.trim(), phone: normalizeDigits($id('op-phone').value.trim()), address: $id('op-addr').value.trim() };
+            if (v.name.length < 2) { OP.form = v; OP.msg = { t: 'err', m: 'اكتب الاسم صح' }; return opDraw(); }
+            if (!/^01[0125][0-9]{8}$/.test(v.phone)) { OP.form = v; OP.msg = { t: 'err', m: 'رقم الموبايل لازم 11 رقم مصري صحيح' }; return opDraw(); }
+            if (v.address.length < 3) { OP.form = v; OP.msg = { t: 'err', m: 'اكتب العنوان بالتفصيل' }; return opDraw(); }
+            opAct('edit', v);
+        }
+        function opSaveCancel() { opAct('cancel', { note: $id('op-reason').value.trim() }); }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$id('order-page').classList.contains('hidden')) closeOrderPage(); });
+        window.addEventListener('hashchange', () => { if (location.hash.startsWith('#o=')) openOrderPage({ token: decodeURIComponent(location.hash.slice(3)) }); });
+        if (location.hash.startsWith('#o=')) openOrderPage({ token: decodeURIComponent(location.hash.slice(3)) });
 
         fillGovs(GOVS.map(g => ({ governorate: g })));
         document.getElementById('cust-gov').addEventListener('change', () => { renderTotals(); onGov(); });
