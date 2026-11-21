@@ -182,10 +182,6 @@
 
                 <!-- Category Filter -->
                 <div class="flex flex-wrap gap-2" id="category-filters">
-                    <button onclick="filterProducts('all')" data-cat="all" class="filter-btn active px-5 py-2 rounded-full text-sm font-bold bg-earth text-white transition-all">الكل</button>
-                    <button onclick="filterProducts('undershirts')" data-cat="undershirts" class="filter-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-earth border border-cotton-border hover:border-sage transition-all">فانلات</button>
-                    <button onclick="filterProducts('boxers')" data-cat="boxers" class="filter-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-earth border border-cotton-border hover:border-sage transition-all">بوكسرات</button>
-                    <button onclick="filterProducts('packs')" data-cat="packs" class="filter-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-earth border border-cotton-border hover:border-sage transition-all">أطقم التوفير</button>
                 </div>
             </div>
 
@@ -279,6 +275,7 @@
                         </svg>
                     </div>
                     <h4 class="text-xl font-extrabold text-earth">تم استلام طلبك بنجاح!</h4>
+                    <div id="order-num" class="hidden bg-sage-light text-earth font-bold rounded-2xl px-4 py-3 mx-auto max-w-xs"></div>
                     <p class="text-sm text-earth-light">شكراً لاختيارك سَلِسْ. هنتصل بيك على رقمك لتأكيد الطلب وميعاد الشحن، والدفع عند الاستلام.</p>
                     <a id="success-wa" href="https://wa.me/201096547794" target="_blank" rel="noopener" class="inline-block mt-2 px-6 py-2 bg-[#25D366] text-white text-sm font-bold rounded-full">تواصل معنا على واتساب</a>
                     <div><button onclick="resetAfterOrder()" class="mt-2 px-6 py-2 bg-earth text-white text-sm font-bold rounded-full">متابعة التسوق</button></div>
@@ -322,74 +319,11 @@
         }
 
         // بيانات المنتجات
-        const products = [
-            {
-                id: 1,
-                name: "فانلة قطن نص كم - رقبة دائرية",
-                category: "undershirts",
-                price: 185,
-                description: "قطن مصري 100% ناعم ومريح للارتداء اليومي تحت الملابس أو في البيت.",
-                colors: [
-                    { name: "أبيض ناصع", hex: "#FFFFFF", border: "#D1D5DB" },
-                    { name: "أسود فحمي", hex: "#2D2D2D", border: "#2D2D2D" },
-                    { name: "رمادي فاتح", hex: "#CBD5E1", border: "#CBD5E1" }
-                ],
-                sizes: ["M", "L", "XL", "2XL", "3XL"],
-                type: "tshirt"
-            },
-            {
-                id: 2,
-                name: "فانلة حمالات كلاسيك (كت)",
-                category: "undershirts",
-                price: 145,
-                description: "قصة مريحة تسمح بمرور الهواء وتمتص العرق بكفاءة عالية.",
-                colors: [
-                    { name: "أبيض ناصع", hex: "#FFFFFF", border: "#D1D5DB" },
-                    { name: "رمادي فاتح", hex: "#CBD5E1", border: "#CBD5E1" }
-                ],
-                sizes: ["M", "L", "XL", "2XL", "3XL"],
-                type: "vest"
-            },
-            {
-                id: 3,
-                name: "بوكسر قطن سترتش مريح",
-                category: "boxers",
-                price: 160,
-                description: "مزيج مثالي من القطن المصري مع لمسة ليكرا لمرونة وثبات بدون التواء.",
-                colors: [
-                    { name: "أخضر سَلِسْ", hex: "#94B097", border: "#94B097" },
-                    { name: "أسود فحمي", hex: "#2D2D2D", border: "#2D2D2D" },
-                    { name: "كحلي داكن", hex: "#1E293B", border: "#1E293B" }
-                ],
-                sizes: ["M", "L", "XL", "2XL", "3XL"],
-                type: "boxer"
-            },
-            {
-                id: 4,
-                name: "بوكس التوفير (3 بوكسرات ألوان)",
-                category: "packs",
-                price: 430,
-                description: "عرض خاص: 3 بوكسرات قطن بألوان أساسية (أخضر سَلِسْ + أسود + كحلي).",
-                colors: [
-                    { name: "مجموعة الألوان", hex: "#94B097", border: "#94B097" }
-                ],
-                sizes: ["M", "L", "XL", "2XL", "3XL"],
-                type: "pack"
-            },
-            {
-                id: 5,
-                name: "طقم الراحة الكامل (فانلة + بوكسر)",
-                category: "packs",
-                price: 315,
-                description: "طقم متكامل يجمع بين فانلة نص كم وبوكسر سَلِسْ بسعر مخفض.",
-                colors: [
-                    { name: "أبيض × أخضر", hex: "#94B097", border: "#94B097" },
-                    { name: "أسود كامل", hex: "#2D2D2D", border: "#2D2D2D" }
-                ],
-                sizes: ["M", "L", "XL", "2XL", "3XL"],
-                type: "pack"
-            }
-        ];
+        // المنتجات والفئات والأسعار والصور كلها بتتحمّل من Supabase (بتتحكم فيها من لوحة الأدمن)
+        let products = [];
+        let categories = [];
+        let catalogError = false;
+        const esc = v => String(v ?? '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
 
         let selectedState = {};
         let cart = [];
@@ -443,7 +377,6 @@
             }
         }
 
-        cart = loadCart();
 
         // ===== المخزون والشحن والكوبونات (من قاعدة البيانات) =====
         const GOVS = ['القاهرة','الجيزة','الإسكندرية','القليوبية','الشرقية','الدقهلية','البحيرة','المنوفية','الغربية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','مطروح','شمال سيناء','جنوب سيناء'];
@@ -564,12 +497,12 @@
             }
         }
 
-        products.forEach(p => {
-            selectedState[p.id] = {
-                color: p.colors[0],
-                size: null
-            };
-        });
+        function initSelected() {
+            selectedState = {};
+            products.forEach(p => {
+                selectedState[p.id] = { color: p.colors[0], size: null, img: 0 };
+            });
+        }
 
         function getProductIllustration(type, colorHex) {
             const strokeColor = colorHex === "#FFFFFF" ? "#8A857C" : "#FFFFFF";
@@ -598,41 +531,58 @@
             }
         }
 
+        function previewHTML(product, sel) {
+            const imgs = sel.color.images || [];
+            const i = Math.min(sel.img || 0, Math.max(imgs.length - 1, 0));
+            const main = imgs.length
+                ? `<img src="${esc(imgs[i])}" alt="${esc(product.name)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover">`
+                : getProductIllustration(product.type, sel.color.hex);
+            const dots = imgs.length > 1 ? `<div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">${imgs.map((u, k) => `<button onclick="selectImg(${product.id}, ${k})" aria-label="صورة ${k + 1}" class="w-2.5 h-2.5 rounded-full border border-white ${k === i ? 'bg-earth' : 'bg-white/70'}"></button>`).join('')}</div>` : '';
+            return main + dots;
+        }
+
+        function selectImg(productId, k) {
+            const sel = selectedState[productId];
+            sel.img = k;
+            const product = products.find(p => p.id === productId);
+            document.getElementById('preview-' + productId).querySelector('.pv').innerHTML = previewHTML(product, sel);
+        }
+
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('products-grid');
+            if (catalogError) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-earth-light"><p class="font-bold mb-3">تعذر تحميل المنتجات الآن</p><button onclick="location.reload()" class="px-6 py-2 bg-earth text-white text-sm font-bold rounded-full">إعادة المحاولة</button></div>`;
+                return;
+            }
             const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-
+            if (!filtered.length) {
+                grid.innerHTML = `<p class="col-span-full text-center py-16 text-earth-light font-bold">مفيش منتجات متاحة حالياً</p>`;
+                return;
+            }
             grid.innerHTML = filtered.map(product => {
                 const currentSel = selectedState[product.id];
                 return `
                 <div class="bg-white rounded-3xl border border-cotton-border p-6 flex flex-col justify-between hover:shadow-xl hover:shadow-earth/5 transition-all">
                     <div>
-                        <div id="preview-${product.id}" class="h-52 rounded-2xl bg-cotton flex items-center justify-center mb-5 relative overflow-hidden">
-                            ${getProductIllustration(product.type, currentSel.color.hex)}
-                            <span class="absolute top-3 right-3 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-earth">
-                                قطن 100%
-                            </span>
+                        <div id="preview-${product.id}" class="h-52 rounded-2xl bg-cotton mb-5 relative overflow-hidden">
+                            <div class="pv absolute inset-0 flex items-center justify-center">${previewHTML(product, currentSel)}</div>
+                            ${product.badge ? `<span class="absolute top-3 right-3 z-10 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-earth">${esc(product.badge)}</span>` : ''}
                         </div>
-
                         <div class="flex items-start justify-between gap-2">
-                            <h3 class="text-lg font-extrabold text-earth">${product.name}</h3>
+                            <h3 class="text-lg font-extrabold text-earth">${esc(product.name)}</h3>
                             <span class="text-lg font-extrabold text-sage-dark whitespace-nowrap">${product.price} ج.م</span>
                         </div>
-                        <p class="text-xs text-earth-light mt-2 leading-relaxed">${product.description}</p>
-
+                        <p class="text-xs text-earth-light mt-2 leading-relaxed">${esc(product.description)}</p>
                         <div class="mt-4">
-                            <span class="text-xs font-bold text-earth block mb-2">اللون: <span id="color-name-${product.id}" class="text-earth-light font-normal">${currentSel.color.name}</span></span>
+                            <span class="text-xs font-bold text-earth block mb-2">اللون: <span id="color-name-${product.id}" class="text-earth-light font-normal">${esc(currentSel.color.name)}</span></span>
                             <div class="flex items-center gap-2">
                                 ${product.colors.map((c, idx) => `
-                                    <button onclick="selectColor(${product.id}, ${idx})" 
-                                        class="w-7 h-7 rounded-full transition-transform ${currentSel.color.name === c.name ? 'ring-2 ring-offset-2 ring-sage scale-110' : 'opacity-80 hover:opacity-100'}"
-                                        style="background-color: ${c.hex}; border: 1px solid ${c.border};"
-                                        title="${c.name}" aria-label="${c.name}">
-                                    </button>
-                                `).join('')}
+                                    <button onclick="selectColor(${product.id}, ${idx})"
+                                        class="w-7 h-7 rounded-full transition-transform ${currentSel.color.name === c.name ? 'ring-2 ring-offset-2 ring-sage scale-110' : ''}"
+                                        style="background-color: ${esc(c.hex)}; border: 1px solid ${esc(c.border)};"
+                                        title="${esc(c.name)}" aria-label="${esc(c.name)}"></button>`).join('')}
                             </div>
                         </div>
-
                         <div class="mt-4">
                             <span class="text-xs font-bold text-earth block mb-2">المقاس:</span>
                             <div class="flex flex-wrap gap-1.5">
@@ -640,15 +590,11 @@
                             </div>
                         </div>
                     </div>
-
                     <button onclick="addToCart(${product.id})" class="mt-6 w-full bg-sage hover:bg-sage-dark text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                         <span>أضف للسلة</span>
                     </button>
-                </div>
-                `;
+                </div>`;
             }).join('');
         }
 
@@ -668,6 +614,7 @@
         function selectColor(productId, colorIdx) {
             const product = products.find(p => p.id === productId);
             selectedState[productId].color = product.colors[colorIdx];
+            selectedState[productId].img = 0;
             const cur = selectedState[productId];
             if (cur.size && stockFor(productId, cur.size, cur.color.name) === 0) cur.size = null;
             const activeCat = document.querySelector('.filter-btn.active')?.dataset.cat || 'all';
@@ -810,7 +757,14 @@
         }
 
         // إرسال الطلب الفعلي إلى Supabase
-        function showOrderSuccess() {
+        function orderCode(id) { return 'SL-' + String(id).padStart(4, '0'); }
+        function showOrderSuccess(id) {
+            const num = document.getElementById('order-num');
+            if (id) {
+                num.innerHTML = `رقم طلبك: <span class="font-en text-lg tracking-wider">${orderCode(id)}</span><br><span class="text-xs font-normal text-earth-light">احتفظ بالرقم ده للمتابعة مع المندوب</span>`;
+                num.classList.remove('hidden');
+                document.getElementById('success-wa').href = waLink('أهلاً سَلِسْ، رقم طلبي ' + orderCode(id) + ' وعايز أتأكد منه');
+            } else { num.classList.add('hidden'); }
             document.getElementById('cart-items').innerHTML = '';
             document.getElementById('checkout-form').classList.add('hidden');
             document.getElementById('cart-footer').classList.add('hidden');
@@ -860,13 +814,9 @@
             try {
                 if (!supabaseClient) throw new Error('supabase-unavailable');
 
-                const { error } = await supabaseClient
-                    .from('orders')
-                    .insert([orderData]);
-
+                const { data, error } = await supabaseClient.rpc('place_order', { p: orderData });
                 if (error) throw error;
-
-                showOrderSuccess();
+                showOrderSuccess(data && data.id);
             } catch (err) {
                 console.error('Supabase Error:', err);
                 let message = 'حدث خطأ أثناء إرسال الطلب، تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
@@ -897,42 +847,54 @@
             toggleCart();
         }
 
-        // الأسعار بتتجاب من جدول products في Supabase (المصدر الوحيد للأسعار).
-        // الأسعار المكتوبة في مصفوفة products فوق احتياطية بس لو الاتصال فشل.
-        async function syncProductsFromDB() {
-            if (!supabaseClient) return;
+        // الكتالوج بيتجاب من Supabase بس (لوحة الأدمن هي المصدر الوحيد)
+        const KNOWN_TYPES = ['tshirt', 'vest', 'boxer', 'pack'];
+        async function loadCatalog() {
+            catalogError = false;
             try {
-                const { data, error } = await supabaseClient
-                    .from('products')
-                    .select('id, price, active');
-                if (error) throw error;
-                if (!Array.isArray(data) || data.length === 0) throw new Error('empty-products');
-
-                const byId = new Map(data.map(r => [r.id, r]));
-                for (let i = products.length - 1; i >= 0; i--) {
-                    const row = byId.get(products[i].id);
-                    if (!row) continue;
-                    if (row.active === false) { products.splice(i, 1); continue; }
-                    const price = Number(row.price);
-                    if (Number.isInteger(price) && price > 0) products[i].price = price;
-                }
-
-                // السلة تتحدث بالأسعار الجديدة وتشيل المنتجات المتوقفة
-                cart = cart.filter(item => products.some(p => p.id === item.id));
-                cart.forEach(item => {
-                    item.price = products.find(p => p.id === item.id).price;
+                if (!supabaseClient) throw new Error('supabase-unavailable');
+                const [pr, ct] = await Promise.all([
+                    supabaseClient.from('products').select('*').eq('active', true).order('sort').order('id'),
+                    supabaseClient.from('categories').select('id,label,sort').eq('active', true).order('sort')
+                ]);
+                if (pr.error) throw pr.error;
+                categories = (ct.data || []).map(c => ({ id: 'c' + c.id, label: c.label }));
+                products = (pr.data || []).map(r => {
+                    let colors = Array.isArray(r.colors) ? r.colors.filter(c => c && c.name) : [];
+                    if (!colors.length) colors = [{ name: 'الافتراضي', hex: '#94B097', border: '#94B097', images: [] }];
+                    colors = colors.map(c => ({ name: c.name, hex: c.hex || '#94B097', border: c.border || c.hex || '#D1D5DB', images: Array.isArray(c.images) ? c.images.filter(Boolean) : [] }));
+                    return {
+                        id: r.id, name: r.name, price: Number(r.price), description: r.description || '',
+                        badge: r.badge || '', category: r.category_id ? 'c' + r.category_id : 'none',
+                        type: KNOWN_TYPES.includes(r.type) ? r.type : 'boxer', colors,
+                        sizes: Array.isArray(r.sizes) && r.sizes.length ? r.sizes : ['M', 'L', 'XL', '2XL', '3XL']
+                    };
                 });
-                saveCart();
             } catch (e) {
-                console.error('Price sync failed, using built-in prices:', e);
+                console.error('Catalog load failed:', e);
+                catalogError = true;
+                products = [];
             }
+            cart = loadCart();
+            initSelected();
+            saveCart();
+        }
+
+        function renderCategories() {
+            const used = categories.filter(c => products.some(p => p.category === c.id));
+            const box = document.getElementById('category-filters');
+            const cur = document.querySelector('.filter-btn.active')?.dataset.cat || 'all';
+            const act = used.some(c => c.id === cur) ? cur : 'all';
+            const mk = (id, label) => `<button onclick="filterProducts('${id}')" data-cat="${id}" class="filter-btn ${act === id ? 'active bg-earth text-white' : 'bg-white text-earth border border-cotton-border hover:border-sage'} px-5 py-2 rounded-full text-sm font-bold transition-all">${esc(label)}</button>`;
+            box.innerHTML = used.length ? mk('all', 'الكل') + used.map(c => mk(c.id, c.label)).join('') : '';
+            return act;
         }
 
         Promise.race([
-            Promise.all([syncProductsFromDB(), loadStoreData()]),
-            new Promise(resolve => setTimeout(resolve, 4000))
+            Promise.all([loadCatalog(), loadStoreData()]),
+            new Promise(resolve => setTimeout(resolve, 8000))
         ]).finally(() => {
-            renderProducts();
+            renderProducts(renderCategories());
             updateCartUI();
         });
 
