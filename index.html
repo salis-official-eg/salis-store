@@ -10,7 +10,7 @@
     <meta property="og:description" content="ملابس داخلية وبوكسرات قطن مصري 100%. الدفع عند الاستلام لجميع المحافظات.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M44 35C44 27 36 23 29 26C22 29 22 39 29 44C36 49 46 53 45 63C44 72 34 76 26 73C19 70 18 63 21 58' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M45 55C58 52 72 41 72 26C72 16 63 13 57 20C50 28 49 52 60 66C68 75 79 71 85 63' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
     <title>سَلِسْ | Salis - ملابس قطنية فاخرة</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0"></script>
+    <script src="supabase.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
@@ -635,6 +635,7 @@
                 showToast(left === 0 ? 'الصنف ده نفد حالياً' : 'المتاح من الصنف ده ' + left + ' قطعة فقط');
                 return;
             }
+            Trk.ev('add_cart', productId);
             if (existing) {
                 if (existing.qty >= MAX_QTY) {
                     showToast('الحد الأقصى ' + MAX_QTY + ' قطعة لكل صنف');
@@ -732,6 +733,7 @@
             drawer.classList.toggle('hidden');
             const isClosed = drawer.classList.contains('hidden');
             document.body.style.overflow = isClosed ? '' : 'hidden';
+            if (!isClosed && cart.length) Trk.ev('open_cart');
             // لو العميل قفل السلة وهو على رسالة نجاح الطلب: ننضّف الفورم والرسالة
             if (isClosed && !document.getElementById('order-success').classList.contains('hidden')) {
                 document.getElementById('checkout-form').reset();
@@ -785,6 +787,7 @@
             const cityV = choiceVal('city'), areaV = choiceVal('area');
             if (!cityV || !areaV) { errorBox.textContent = 'اختر المحافظة ثم المدينة ثم المنطقة.'; errorBox.classList.remove('hidden'); return; }
             submitBtn.disabled = true;
+            Trk.ev('checkout');
             submitBtn.innerHTML = '<span>جاري تسجيل طلبك...</span>';
             errorBox.classList.add('hidden');
 
@@ -1073,6 +1076,7 @@
                 if (error) throw error;
                 if (data && data.error) { acErr(data.error); return; }
                 keepToken(data.token);
+                Trk.ev('login');
                 await refreshCustomer();
                 drawAccount();
             } catch (e) { acErr(((e && e.message) || '').match(/[\u0600-\u06FF]/) ? e.message : 'حصل خطأ، جرّب تاني'); }
@@ -1287,6 +1291,49 @@
         window.addEventListener('hashchange', () => { if (location.hash.startsWith('#o=')) openOrderPage({ token: decodeURIComponent(location.hash.slice(3)) }); });
         if (location.hash.startsWith('#o=')) openOrderPage({ token: decodeURIComponent(location.hash.slice(3)) });
 
+
+        /* ===== إحصائيات الزوار (مجهولة: بدون IP ولا بيانات شخصية، بتظهر في لوحة التحكم) ===== */
+        const Trk = (() => {
+            const ua = navigator.userAgent || '';
+            const off = { ev() {} };
+            if (/bot|crawl|spider|slurp|facebookexternalhit|headless|lighthouse|preview|monitor/i.test(ua) || navigator.webdriver || navigator.doNotTrack === '1') return off;
+            const uid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));
+            let vid, ses;
+            try { vid = localStorage.getItem('salis_vid'); if (!vid) { vid = uid(); localStorage.setItem('salis_vid', vid); } } catch (e) { vid = uid(); }
+            const getSid = () => {   // جلسة جديدة بعد 30 دقيقة خمول
+                const now = Date.now();
+                try { ses = JSON.parse(sessionStorage.getItem('salis_ses') || 'null'); } catch (e) { ses = null; }
+                let fresh = false;
+                if (!ses || !ses.sid || now - ses.t > 30 * 60 * 1000) { ses = { sid: uid(), t: now }; fresh = true; }
+                ses.t = now;
+                try { sessionStorage.setItem('salis_ses', JSON.stringify(ses)); } catch (e) {}
+                return { sid: ses.sid, fresh };
+            };
+            const ipad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+            const tablet = ipad || (/Android/.test(ua) && !/Mobile/.test(ua));
+            const device = tablet ? 'tablet' : /Mobi|iPhone|iPod|Android|Windows Phone/i.test(ua) ? 'mobile' : 'desktop';
+            const os = ipad ? 'iPadOS' : /iPhone|iPod/.test(ua) ? 'iOS' : /Android/.test(ua) ? 'Android' : /CrOS/.test(ua) ? 'ChromeOS' : /Windows/.test(ua) ? 'Windows' : /Macintosh/.test(ua) ? 'macOS' : /Linux/.test(ua) ? 'Linux' : 'Other';
+            const browser = /FBAN|FBAV/.test(ua) ? 'Facebook App' : /Instagram/.test(ua) ? 'Instagram App' : /musical_ly|TikTok|Bytedance/i.test(ua) ? 'TikTok App' : /SamsungBrowser/.test(ua) ? 'Samsung Internet' : /Edg\//.test(ua) ? 'Edge' : /OPR\/|Opera/.test(ua) ? 'Opera' : /Firefox|FxiOS/.test(ua) ? 'Firefox' : /Chrome|CriOS/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : 'Other';
+            let refHost = '';
+            try { const h = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; refHost = h && h !== location.hostname ? h : ''; } catch (e) {}
+            let utm = ''; try { utm = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch (e) {}
+            const cls = t => /facebook|(^|\.)fb\.|^fb$/.test(t) ? 'facebook' : /instagram/.test(t) ? 'instagram' : /tiktok/.test(t) ? 'tiktok' : /whatsapp|wa\.me/.test(t) ? 'whatsapp' : /youtube|youtu\.be/.test(t) ? 'youtube' : /google\./.test(t) ? 'google' : 'other';
+            const inApp = browser === 'Instagram App' ? 'instagram' : browser === 'Facebook App' ? 'facebook' : browser === 'TikTok App' ? 'tiktok' : '';
+            const src = utm ? cls(utm) : refHost ? cls(refHost) : (inApp || 'direct');
+            return {
+                ev(name, pid) {
+                    try {
+                        const { sid, fresh } = getSid();
+                        const p = { sid, vid, ev: fresh && name !== 'visit' ? 'visit' : name, device, os, browser, src, ref: refHost, w: Math.round(window.innerWidth || 0) };
+                        if (pid) p.pid = pid;
+                        if (customerToken) p.token = customerToken;
+                        supabaseClient.rpc('track', { p }).then(() => {}, () => {});
+                        if (fresh && name !== 'visit') supabaseClient.rpc('track', { p: { ...p, ev: name } }).then(() => {}, () => {});
+                    } catch (e) {}
+                }
+            };
+        })();
+        Trk.ev('visit');
         fillGovs(GOVS.map(g => ({ governorate: g })));
         document.getElementById('cust-gov').addEventListener('change', () => { renderTotals(); onGov(); });
         document.getElementById('cust-city').addEventListener('change', () => onCity());
