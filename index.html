@@ -55,7 +55,7 @@
 <style id="salis-ext">
 :root{--cotton:#EBE5D8}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{background-color:var(--cotton)!important;overflow-x:hidden}
+body{background-color:var(--cotton)!important}
 .bg-cotton{background-color:var(--cotton)!important}
 .bg-cotton\/50{background-color:color-mix(in srgb,var(--cotton) 50%,transparent)!important}
 .bg-cotton\/90{background-color:color-mix(in srgb,var(--cotton) 90%,transparent)!important}
@@ -195,14 +195,24 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 .toast-cart{margin-inline-start:.6rem;background:#94B097;color:#fff;font-weight:800;border-radius:9999px;padding:.2rem .8rem;font-size:.8rem}
 #toast{pointer-events:auto}
 
+#pdp,#order-page,#acct-modal,#story-modal{top:var(--hdr,0px)!important}
+#cart-drawer{z-index:70!important}
+#toast{z-index:80!important}
+.hs{margin-top:0;max-width:none;padding:0}
+.hs-track{height:clamp(240px,50vw,620px);border-radius:0;box-shadow:none}
+.hs-cap{padding:clamp(1.2rem,4vw,3rem);padding-bottom:clamp(2.2rem,5vw,3.5rem)}
+.hs-cap h2{font-size:clamp(1.3rem,4.2vw,2.8rem)}
+body[style*="hidden"] #topbar{position:fixed!important;top:0;left:0;right:0}
+#topbar{z-index:58!important}
+
 </style>
 </head>
 <body class="antialiased selection:bg-sage selection:text-white">
 
-    <div id="announce" class="hidden text-center text-sm font-bold px-4 py-2"></div>
+    <div id="topbar" class="sticky top-0 z-[58]"><div id="announce" class="hidden text-center text-sm font-bold px-4 py-2"></div>
 
     <!-- Navbar -->
-    <header class="relative z-40 bg-cotton border-b border-cotton-border">
+    <header class="bg-cotton border-b border-cotton-border">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-2 sm:gap-3 group min-w-0">
                 <div class="w-11 h-11 rounded-2xl bg-sage-light flex items-center justify-center transition-transform group-hover:scale-105">
@@ -231,12 +241,12 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
                 <span id="cart-badge" class="bg-sage text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
             </button></div>
         </div>
-    </header>
+    </header></div>
 
     <section id="hero-slider" class="hs hidden" aria-label="Salis" aria-roledescription="carousel"><div id="hs-track" class="hs-track"></div><div id="hs-dots" class="hs-dots"></div></section>
 
     <!-- Hero Section -->
-    <section class="relative py-16 sm:py-24 overflow-hidden">
+    <section id="hero-static" class="relative py-16 sm:py-24 overflow-hidden">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
             <div class="inline-flex flex-col items-center mb-6">
                 <svg viewBox="0 0 120 110" class="w-24 h-24 mb-2" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1647,10 +1657,10 @@ async function initHero() {
     HERO.slides = (data || []).filter(s => safeImg(s.image_url));
   } catch (e) { HERO.slides = []; }
   const sec = $id('hero-slider');
-  if (!HERO.slides.length) { sec.classList.add('hidden'); return; }
+  if (!HERO.slides.length) { sec.classList.add('hidden'); const hs1 = $id('hero-static'); if (hs1) hs1.classList.remove('hidden'); return; }
   HERO.int = secs(SITE_CFG.hero_interval, 3, 1.5, 20);
   HERO.slides.forEach(s => { if (s.title_ar && s.title_en) DYN[s.title_ar] = s.title_en; if (s.subtitle_ar && s.subtitle_en) DYN[s.subtitle_ar] = s.subtitle_en; });
-  sec.classList.remove('hidden');
+  sec.classList.remove('hidden'); const hs0 = $id('hero-static'); if (hs0) hs0.classList.add('hidden');
   $id('hs-track').innerHTML = HERO.slides.map((s, i) => `<div class="hs-slide${i === 0 ? ' on' : ''}" aria-hidden="${i === 0 ? 'false' : 'true'}"><img src="${esc(s.image_url)}" alt="${esc(s.title_ar || 'Salis')}" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">${(s.title_ar || s.subtitle_ar || safeLink(s.link)) ? `<div class="hs-cap">${s.title_ar ? `<h2>${esc(s.title_ar)}</h2>` : ''}${s.subtitle_ar ? `<p>${esc(s.subtitle_ar)}</p>` : ''}${safeLink(s.link) ? `<a href="${esc(s.link)}" class="hs-cta">تسوّق الآن</a>` : ''}</div>` : ''}</div>`).join('');
   $id('hs-dots').innerHTML = HERO.slides.length > 1 ? HERO.slides.map((s, i) => `<button type="button" onclick="heroGo(${i})" aria-label="${i + 1}" class="${i === 0 ? 'on' : ''}"></button>`).join('') : '';
   sec.classList.toggle('single', HERO.slides.length < 2);
@@ -1732,7 +1742,7 @@ function drawPdp() {
   const off = p.old_price > p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
   $id('pdp-body').innerHTML = `
     <div class="pdp-top"><div class="pdp-bar"><button type="button" onclick="closePdp()" class="pdp-back">${ARW()} <span>رجوع للمنتجات</span></button>
-      <span class="flex items-center gap-2"><button type="button" data-notr onclick="toggleLang()" class="lang-btn">${LANG === 'en' ? 'عربي' : 'EN'}</button><button type="button" onclick="toggleCart()" class="pdp-cartbtn" aria-label="فتح السلة">السلة <b id="pdp-badge">${cart.reduce((s, i) => s + i.qty, 0)}</b></button></span></div></div>
+      </div></div>
     <div class="pdp-grid">
       <div class="pdp-gal">${gal}</div>
       <div class="pdp-info">
@@ -1930,6 +1940,9 @@ function toastCartBtn() {
   b.onclick = () => { t.classList.add('translate-y-20', 'opacity-0'); toggleCart(); };
   t.append(' '); t.append(b); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 4200);
 }
+
+/* header stays visible above every page: measure it so pages start right under it */
+(function () { const t = $id('topbar'); if (!t) return; const set = () => document.documentElement.style.setProperty('--hdr', t.offsetHeight + 'px'); set(); if ('ResizeObserver' in window) new ResizeObserver(set).observe(t); window.addEventListener('resize', set); })();
 
 /* ===== init ===== */
 document.querySelectorAll("[data-cms]").forEach(el=>{el.dataset.ar=el.textContent.trim()});
