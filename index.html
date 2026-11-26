@@ -98,7 +98,7 @@ img,svg{max-width:100%}
 /* ===== product page ===== */
 .pdp{position:fixed;inset:0;z-index:45;background:var(--cotton);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .pdp.hidden{display:none}
-.pdp-top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
+.pdp-top{position:relative;z-index:5;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
 .pdp-bar{max-width:72rem;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem}
 .pdp-back,.pdp-cartbtn{font-weight:700;font-size:.9rem;color:#3b3a36;display:inline-flex;gap:.4rem;align-items:center;padding:.5rem .9rem;border-radius:9999px;background:#fff;border:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
 .pdp-cartbtn b{background:#94B097;color:#fff;border-radius:9999px;min-width:1.25rem;height:1.25rem;font-size:.72rem;display:inline-flex;align-items:center;justify-content:center}
@@ -142,8 +142,8 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 .story-btn.hidden{display:none}
 .story-modal{position:fixed;inset:0;z-index:62;background:var(--cotton);overflow-y:auto}
 .story-modal.hidden{display:none}
-.st-top{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.2rem;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000);font-size:1.1rem}
-.st-top button{width:2.3rem;height:2.3rem;border-radius:9999px;background:#fff}
+.st-top{position:relative;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.2rem;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000);font-size:1.1rem}
+
 .st-wrap{max-width:46rem;margin:0 auto;padding:1.5rem 1.2rem 4rem;display:grid;gap:1.6rem}
 .st-ch{display:grid;grid-template-columns:auto 1fr;gap:1rem;background:#fff;border-radius:1.5rem;padding:1.3rem;border:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
 .st-n{font-size:2rem;font-weight:800;color:#94B097;font-family:Poppins,sans-serif;line-height:1}
@@ -156,8 +156,8 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 #acct-modal:has(.acct-page){background:var(--cotton)}
 #acct-body.acct-card{background:#fff;max-width:28rem}
 #acct-body.acct-page{background:transparent;box-shadow:none;border-radius:0;max-width:44rem;width:100%;margin:0 auto}
-.ac-top{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.2rem;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);font-size:1.1rem;border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
-.ac-top button{width:2.3rem;height:2.3rem;border-radius:9999px;background:#fff}
+.ac-top{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.2rem;background:color-mix(in srgb,var(--cotton) 92%,transparent);backdrop-filter:blur(8px);font-size:1.1rem;border-bottom:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
+
 .ac-wrap{padding:1.2rem 1rem 3rem;display:grid;gap:1rem}
 .ac-hero{display:flex;align-items:center;gap:1rem;background:#fff;border-radius:1.5rem;padding:1.1rem;flex-wrap:wrap}
 .av{border-radius:9999px;object-fit:cover;flex:0 0 auto}
@@ -190,6 +190,11 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 .ly-reward{font-size:.85rem}.ly-st{font-size:.8rem;font-weight:800;color:#5f7d63}
 @media(prefers-reduced-motion:reduce){.hs-slide,.g-img,.pimg{transition:none}html{scroll-behavior:auto}}
 
+.navback{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;font-size:.85rem;padding:.5rem 1rem;border-radius:9999px;background:#fff;border:1px solid color-mix(in srgb,var(--cotton) 86%,#000);color:#3b3a36}
+.navback:hover{border-color:#94B097}
+.toast-cart{margin-inline-start:.6rem;background:#94B097;color:#fff;font-weight:800;border-radius:9999px;padding:.2rem .8rem;font-size:.8rem}
+#toast{pointer-events:auto}
+
 </style>
 </head>
 <body class="antialiased selection:bg-sage selection:text-white">
@@ -197,7 +202,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
     <div id="announce" class="hidden text-center text-sm font-bold px-4 py-2"></div>
 
     <!-- Navbar -->
-    <header class="sticky top-0 z-40 bg-cotton/90 backdrop-blur-md border-b border-cotton-border">
+    <header class="relative z-40 bg-cotton border-b border-cotton-border">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-2 sm:gap-3 group min-w-0">
                 <div class="w-11 h-11 rounded-2xl bg-sage-light flex items-center justify-center transition-transform group-hover:scale-105">
@@ -800,7 +805,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
             }
 
             updateCartUI();
-            showToast();
+            showToast(); toastCartBtn();
         }
 
         function updateQty(key, delta) {
@@ -996,7 +1001,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
             setChoice('city', null, 'اختر المحافظة الأول'); setChoice('area', null, 'اختر المدينة الأول');
             applyCustomerToCheckout();
             updateCartUI();
-            toggleCart();
+            cartCloseSilent();
         }
 
         // الكتالوج بيتجاب من Supabase بس (لوحة الأدمن هي المصدر الوحيد)
@@ -1233,7 +1238,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
             try { await supabaseClient.rpc('customer_logout', { t: customerToken }); } catch (e) {}
             keepToken(null); customer = null; custData = null; renderAcctBtn(); applyCustomerToCheckout(); closeAccount();
         }
-        function useCoupon(code) { closeAccount(); $id('coupon-input').value = code; if (cart.length) { if ($id('cart-drawer').classList.contains('hidden')) toggleCart(); applyCoupon(); } else { showToast('ضيف منتجات للسلة وبعدين اطبّق الكود: ' + code); } }
+        function useCoupon(code) { closeAccountSilent(); $id('coupon-input').value = code; if (cart.length) { if ($id('cart-drawer').classList.contains('hidden')) toggleCart(); applyCoupon(); } else { showToast('ضيف منتجات للسلة وبعدين اطبّق الكود: ' + code); } }
         function timeline(o) {
             if (o.status === 'cancelled') return '<p class="text-xs font-bold text-red-600">الطلب ده اتلغى</p>';
             const ix = ST_FLOW.indexOf(o.status), dates = [o.created_at, o.confirmed_at, o.shipped_at, o.delivered_at];
@@ -1344,7 +1349,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
         }
         function opList() {
             const os = OP.guest ? OP.glist : ((custData && custData.orders) || []);
-            if (!os.length) return `<div class="text-center py-16"><p class="font-bold text-earth">لسه مفيش طلبات</p><p class="text-xs text-earth-light mt-1">أول ما تطلب هتلاقي حالته هنا.</p><button onclick="closeOrderPage(); location.hash='#products'" class="mt-5 px-6 py-2.5 bg-sage text-white text-sm font-bold rounded-full">تسوّق دلوقتي</button></div>`;
+            if (!os.length) return `<div class="text-center py-16"><p class="font-bold text-earth">لسه مفيش طلبات</p><p class="text-xs text-earth-light mt-1">أول ما تطلب هتلاقي حالته هنا.</p><button onclick="closeOrderPageSilent(); document.getElementById('products').scrollIntoView({ behavior: 'smooth' })" class="mt-5 px-6 py-2.5 bg-sage text-white text-sm font-bold rounded-full">تسوّق دلوقتي</button></div>`;
             return `<h2 class="text-lg font-extrabold text-earth">طلباتك</h2><div class="space-y-3">${os.map(o => `<button onclick="opOpen(${o.id})" class="w-full text-right bg-white rounded-2xl border border-cotton-border hover:border-sage p-4 shadow-sm transition-all"><div class="flex items-center justify-between"><b class="font-en tracking-wider text-earth">${orderCode(o.id)}</b>${opChip(o.status)}</div><div class="flex justify-between text-xs text-earth-light mt-2"><span>${fmtDate(o.created_at)}</span><b class="text-earth">${o.total_amount} ج.م</b></div></button>`).join('')}</div>${OP.guest ? '<p class="text-[11px] text-earth-light text-center">الطلبات دي محفوظة على الجهاز ده بس. سجّل حساب عشان تشوفها من أي جهاز.</p>' : ''}`;
         }
         function opDraw() {
@@ -1355,9 +1360,9 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
             else if (OP.failed) body = '<p class="text-center text-sm text-red-600 font-bold py-16">حصل خطأ في التحميل، جرّب تاني.</p>';
             else if (inDetail && !o) body = '<p class="text-center text-sm text-earth-light py-16">الرابط ده مش صحيح أو الطلب مش موجود.</p>';
             else body = inDetail ? opDetail(o) : opList();
-            $id('op-body').innerHTML = `<div class="sticky top-0 z-10 bg-cotton/90 backdrop-blur-md border-b border-cotton-border"><div class="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
+            $id('op-body').innerHTML = `<div class="relative z-10 bg-cotton border-b border-cotton-border"><div class="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
                     <div class="flex items-center gap-2">${back}<div class="w-9 h-9 rounded-xl bg-sage-light flex items-center justify-center">${LOGO_SVG}</div><div class="leading-tight"><b class="block text-earth">${inDetail ? 'طلبك' : 'طلباتي'}</b><span class="text-[10px] font-en font-semibold text-sage-dark tracking-wider">SALIS</span></div></div>
-                    <button onclick="closeOrderPage()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div></div>
+                    <button onclick="closeOrderPage()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div></div>
                 <div class="max-w-lg mx-auto px-4 py-6 space-y-4">${body}
                     <a href="${supportLink(o)}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 bg-[#25D366] hover:brightness-95 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all"><svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2z"/></svg>تواصل مع الدعم على واتساب</a>
                     <p class="text-center text-[11px] text-earth-light">لو عندك أي مشكلة أو استفسار بخصوص الطلب كلّمنا.</p></div>`;
@@ -1495,14 +1500,14 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 /* ===== Language engine (AR/EN) — translates every text node, placeholder and message ===== */
 let LANG = 'ar';
 try { LANG = localStorage.getItem('salis_lang') === 'en' ? 'en' : 'ar'; } catch (e) {}
-const LOC = () => LANG === 'en' ? 'en-GB' : 'ar-EG';
+function LOC() { return LANG === 'en' ? 'en-GB' : 'ar-EG'; }
 const DYN = {};
 const I18N = {
-'ج.م':'EGP','خصم':'Discount','الكل':'All','باقي':'Left','دخول':'Login','رجوع':'Back','زوّد':'Add','صورة':'Image','طلبك':'Your order','ملغي':'Cancelled','إغلاق':'Close','الاسم':'Name','الخصم':'Discount','الدفع':'Payment','السلة':'Cart','الشحن':'Shipping','تطبيق':'Apply','حسابي':'My account','مجاني':'Free','استخدم':'Use','سَلِسْ':'Salis','طلباتك':'Your orders','طلباتي':'My orders','العنوان':'Address','المجموع':'Subtotal','المدينة':'City','المنطقة':'Area','الموبايل':'Mobile','المنتجات':'Products','اللون:':'Color:','المقاس:':'Size:','مجاني 🎉':'Free 🎉','لحد':'until','قطعة فقط':'pieces only','أضف للسلة':'Add to cart','الإجمالي:':'Total:','الافتراضي':'Default','حساب جديد':'New account','خاص بعميل':'for a customer','خرج للشحن':'Out for delivery','رقم الطلب':'Order number','رقم طلبك:':'Your order number:','عن سَلِسْ':'About Salis','فتح السلة':'Open cart','كل طلباتك':'All your orders','المحافظة *':'Governorate *','تم التأكيد':'Confirmed','تم التسليم':'Delivered','تواصل معنا':'Contact us','داخل بحساب':'Signed in as','أيوه، إلغاء':'Yes, cancel','إغلاق السلة':'Close cart','إلغاء الطلب':'Cancel order','الحد الأقصى':'Maximum','تأكيد الطلب':'Confirm order','حفظ التعديل':'Save changes','طلبات جارية':'Active orders','كلمة السر *':'Password *','إنشاء الحساب':'Create account','اختر المنطقة':'Select area','باكدج سَلِسْ':'Salis Package','تتبّع طلباتي':'Track my orders','تسجيل الخروج':'Log out','تسجيل الدخول':'Log in','تسوّق دلوقتي':'Shop now','رقم الموبايل':'Mobile number','قطعة لكل صنف':'pieces per item','ليـه سَلِسْ؟':'Why Salis?','اختر المحافظة':'Select governorate','اكتب الاسم صح':'Please enter a valid name','الاسم ثلاثي *':'Full name (3 parts) *','جاري التحميل…':'Loading…','جاري التحميل...':'Loading...','سلة المشتريات':'Shopping cart','في الطريق ليك':'On its way to you','قطن مصري 100%':'100% Egyptian Cotton','متابعة التسوق':'Continue shopping','منتجات سَلِسْ':'Salis Products','إعادة المحاولة':'Try again','الشحن والتوصيل':'Shipping & Delivery','الطلب ده اتلغى':'This order was cancelled','بيانات التوصيل':'Delivery details','تعديل البيانات':'Edit details','تم إلغاء الطلب':'Order cancelled','رقم الموبايل *':'Mobile number *','عنوانك المحفوظ':'Your saved address','لسه مفيش طلبات':'No orders yet','لسه مفيش طلبات.':'No orders yet.','معلومات إضافية':'Additional information','الاسم بالكامل *':'Full name *','تم استلام الطلب':'Order received','كوبوناتك الخاصة':'Your coupons','وعايز أتأكد منه':'and I want to confirm it','اكتب اسم المدينة':'Enter the city name','العنوان بالتفصيل':'Detailed address','المنطقة / الحي *':'Area / District *','تأكيد الطلب الآن':'Place order now','مثال: أحمد محمود':'e.g. Ahmed Mahmoud','اختر المدينة الأول':'Select city first','المتاح من الصنف ده':'Available of this item',
+'ج.م':'EGP','خصم':'Discount','الكل':'All','باقي':'Left','دخول':'Login','زوّد':'Add','صورة':'Image','طلبك':'Your order','ملغي':'Cancelled','إغلاق':'Close','الاسم':'Name','الخصم':'Discount','الدفع':'Payment','السلة':'Cart','الشحن':'Shipping','تطبيق':'Apply','حسابي':'My account','مجاني':'Free','استخدم':'Use','سَلِسْ':'Salis','طلباتك':'Your orders','طلباتي':'My orders','العنوان':'Address','المجموع':'Subtotal','المدينة':'City','المنطقة':'Area','الموبايل':'Mobile','المنتجات':'Products','اللون:':'Color:','المقاس:':'Size:','مجاني 🎉':'Free 🎉','لحد':'until','قطعة فقط':'pieces only','أضف للسلة':'Add to cart','الإجمالي:':'Total:','الافتراضي':'Default','حساب جديد':'New account','خاص بعميل':'for a customer','خرج للشحن':'Out for delivery','رقم الطلب':'Order number','رقم طلبك:':'Your order number:','عن سَلِسْ':'About Salis','فتح السلة':'Open cart','كل طلباتك':'All your orders','المحافظة *':'Governorate *','تم التأكيد':'Confirmed','تم التسليم':'Delivered','تواصل معنا':'Contact us','داخل بحساب':'Signed in as','أيوه، إلغاء':'Yes, cancel','إغلاق السلة':'Close cart','إلغاء الطلب':'Cancel order','الحد الأقصى':'Maximum','تأكيد الطلب':'Confirm order','حفظ التعديل':'Save changes','طلبات جارية':'Active orders','كلمة السر *':'Password *','إنشاء الحساب':'Create account','اختر المنطقة':'Select area','باكدج سَلِسْ':'Salis Package','تتبّع طلباتي':'Track my orders','تسجيل الخروج':'Log out','تسجيل الدخول':'Log in','تسوّق دلوقتي':'Shop now','رقم الموبايل':'Mobile number','قطعة لكل صنف':'pieces per item','ليـه سَلِسْ؟':'Why Salis?','اختر المحافظة':'Select governorate','اكتب الاسم صح':'Please enter a valid name','الاسم ثلاثي *':'Full name (3 parts) *','جاري التحميل…':'Loading…','جاري التحميل...':'Loading...','سلة المشتريات':'Shopping cart','في الطريق ليك':'On its way to you','قطن مصري 100%':'100% Egyptian Cotton','متابعة التسوق':'Continue shopping','منتجات سَلِسْ':'Salis Products','إعادة المحاولة':'Try again','الشحن والتوصيل':'Shipping & Delivery','الطلب ده اتلغى':'This order was cancelled','بيانات التوصيل':'Delivery details','تعديل البيانات':'Edit details','تم إلغاء الطلب':'Order cancelled','رقم الموبايل *':'Mobile number *','عنوانك المحفوظ':'Your saved address','لسه مفيش طلبات':'No orders yet','لسه مفيش طلبات.':'No orders yet.','معلومات إضافية':'Additional information','الاسم بالكامل *':'Full name *','تم استلام الطلب':'Order received','كوبوناتك الخاصة':'Your coupons','وعايز أتأكد منه':'and I want to confirm it','اكتب اسم المدينة':'Enter the city name','العنوان بالتفصيل':'Detailed address','المنطقة / الحي *':'Area / District *','تأكيد الطلب الآن':'Place order now','مثال: أحمد محمود':'e.g. Ahmed Mahmoud','اختر المدينة الأول':'Select city first','المتاح من الصنف ده':'Available of this item',
 'المدينة / المركز *':'City / Center *','تسوق التشكيلة الآن':'Shop the collection','ثبات المقاس واللون':'Size & Color Stability','جاري تسجيل طلبك...':'Placing your order...','حصل خطأ، جرّب تاني':'Something went wrong, please try again','اختر المحافظة الأول':'Select governorate first','اختر المنطقة / الحي':'Select area / district','الصنف ده نفد حالياً':'This item is currently out of stock','الكود لم يعد صالحاً':'The code is no longer valid','تم تطبيق الكود: خصم':'Code applied: discount','جميع الحقوق محفوظة.':'All rights reserved.','كود الخصم (اختياري)':'Discount code (optional)','مثال: أحمد محمد علي':'e.g. Ahmed Mohamed Ali','اعرف أكتر عن خاماتنا':'Learn more about our fabrics','الاستبدال والاسترجاع':'Exchange & Returns','تعديل بيانات التوصيل':'Edit delivery details','راحة بدون تيكيت مزعج':'Comfort Without Annoying Tags','اختر المدينة / المركز':'Select city / center','اكتب العنوان بالتفصيل':'Please enter the detailed address','تم استلام طلبك بنجاح!':'Your order has been received!','تواصل معنا على واتساب':'Contact us on WhatsApp','حساب العميل (اختياري)':'Customer account (optional)','سبب الإلغاء (اختياري)':'Cancellation reason (optional)','أضف منتجات للسلة الأول':'Add products to the cart first','تمت الإضافة إلى السلة ✓':'Added to cart ✓','رقم الموبايل (واتساب) *':'Mobile number (WhatsApp) *','اكتب اسم المنطقة أو الحي':'Enter the area or district name','تعذر تحميل المنتجات الآن':'Could not load products right now','مفيش منتجات متاحة حالياً':'No products available right now','تم تأكيد طلبك ✓ شكراً ليك':'Your order is confirmed ✓ Thank you','تواصل مع الدعم على واتساب':'Contact support on WhatsApp','يُحسب بعد اختيار المحافظة':'Calculated after selecting the governorate','سلة المشتريات فارغة حالياً':'Your cart is empty','من فضلك اختار المقاس أولاً':'Please choose a size first','كود الخصم ده خاص بعميل تاني.':'This discount code belongs to another customer.','أول ما تطلب هتلاقي حالته هنا.':'Once you order, you will find its status here.','الإجمالي (الدفع عند الاستلام)':'Total (cash on delivery)','حصل خطأ في التحميل، جرّب تاني.':'Loading error, please try again.','أكّد طلبك من تحت عشان نبدأ نجهّزه.':'Confirm your details below so we can start preparing it.','رقم الموبايل لازم 11 رقم مصري صحيح':'The mobile number must be a valid 11-digit Egyptian number','احتفظ بالرقم ده للمتابعة مع المندوب':'Keep this number to follow up with the courier','الموقع مشغول لحظات، جرّب بعد دقيقة.':'The site is busy, please try again in a minute.','بيانات التوصيل (الدفع عند الاستلام)':'Delivery details (cash on delivery)','تم تسليم طلبك — نتمنى القطن يعجبك 🌿':'Your order was delivered — we hope you love the cotton 🌿','اختر المحافظة ثم المدينة ثم المنطقة.':'Select the governorate, then the city, then the area.','الرابط ده مش صحيح أو الطلب مش موجود.':'This link is invalid or the order does not exist.','ضيف منتجات للسلة وبعدين اطبّق الكود:':'Add products to the cart, then apply the code:','أهلاً سَلِسْ، عندي استفسار بخصوص طلبي':'Hello Salis, I have a question about my order','لتغيير المنتجات أو المحافظة كلّم الدعم.':'To change products or governorate, contact support.','اختر المقاس واللون المناسب لك وأضف للسلة':'Choose your size and color, then add to cart','اختر منتجاتك المفضلة من سَلِسْ وأضفها هنا':'Choose your favorite Salis products and add them here','تعذر التحقق من الكود الآن، حاول مرة أخرى.':'Could not verify the code now, please try again.','أهلاً سَلِسْ، لسه عامل طلب وعايز أتأكد منه':'Hello Salis, I just placed an order and want to confirm it','لو عندك أي مشكلة أو استفسار بخصوص الطلب كلّمنا.':'If you have any problem or question about your order, talk to us.','مثال: شارع النصر، عمارة 12، الدور الثالث، شقة 7':'e.g. El-Nasr St., Building 12, 3rd floor, Apt 7','اتحفظ التعديل ✓ لو البيانات تمام اضغط تأكيد البيانات':'Changes saved ✓ If the details are correct, tap Confirm details','عندك حساب؟ سجّل دخول عشان بياناتك تتحفظ (اختياري)':'Have an account? Log in to save your details (optional)','كود الخصم لم يعد صالحاً. شيله من الخانة وجرّب تاني.':'The discount code is no longer valid. Remove it and try again.','نعومة القطن المصري الصافي.. مصممة لراحتك في كل لحظة':'The softness of pure Egyptian cotton… designed for your comfort every moment','نفد المخزون من أحد المنتجات. راجع السلة وجرّب تاني.':'One of the products is out of stock. Review your cart and try again.','نسيت كلمة السر؟ كلمنا واتساب وهنعيّن لك واحدة جديدة.':'Forgot your password? Message us on WhatsApp and we will set a new one.','اكتب رقم موبايل مصري صحيح من 11 رقم، مثال: 01012345678':'Enter a valid 11-digit Egyptian mobile number, e.g. 01012345678','العنوان بالتفصيل (الشارع، رقم العمارة، الدور والشقة) *':'Detailed address (street, building no., floor and apartment) *','تم إرسال طلبات كثيرة بنفس الرقم، حاول مرة أخرى بعد قليل.':'Too many orders were sent with the same number, please try again shortly.','طلبك خرج للشحن ومتجهّز يوصلك قريب. لأي تعديل كلّم الدعم.':'Your order is out for delivery and will reach you soon. For any change, contact support.','لسه مفيش عنوان — هيتحفظ تلقائي مع أول طلب ليك وانت داخل بحسابك.':'No address yet — it will be saved automatically with your first order while signed in.','الدفع عند الاستلام متاح لجميع محافظات مصر • استبدال سهل خلال 14 يوم':'Cash on delivery available in all Egyptian governorates • Easy exchange within 14 days','حدث خطأ أثناء إرسال الطلب، تأكد من اتصالك بالإنترنت وحاول مرة أخرى.':'An error occurred while sending the order. Check your connection and try again.','الطلبات دي محفوظة على الجهاز ده بس. سجّل حساب عشان تشوفها من أي جهاز.':'These orders are saved on this device only. Create an account to see them from any device.','أجود أنواع القطن طويل التيلة لنعومة فائقة وملمس لطيف على البشرة الحساسة.':'The finest long-staple cotton for exceptional softness and a gentle feel on sensitive skin.','طباعة حرارية ناعمة بدلاً من التيكيت القماشي التقليدي لمنع أي حكة أو ضيق.':'Soft heat-transfer printing instead of traditional fabric tags to prevent any itching or tightness.','معالجة ضد الانكماش والوبرة لتحتفظ القطعة بشكلها ونعومتها بعد عشرات الغسلات.':'Treated against shrinkage and pilling so the piece keeps its shape and softness after dozens of washes.','الحساب اختياري — تقدر تطلب من غير تسجيل. الحساب بيحفظ بياناتك وبيورّيك كل طلباتك وحالتها.':'An account is optional — you can order without signing up. It saves your details and shows all your orders and their status.','شكراً لاختيارك سَلِسْ. هنتصل بيك على رقمك لتأكيد الطلب وميعاد الشحن، والدفع عند الاستلام.':'Thank you for choosing Salis. We will contact you on your number to confirm the order and delivery time. Payment is on delivery.','ملابس داخلية وبيزيكس قطنية 100% بخياطة ناعمة لا تسبب أي احتكاك، وتهوية مثالية تدوم طوال اليوم.':'100% cotton underwear and boxers with soft stitching that causes no friction, and ideal breathability that lasts all day.',
 '© 2026 Salis. جميع الحقوق محفوظة.':'© 2026 Salis. All rights reserved.','سَلِسْ | Salis':'Salis | سَلِسْ','المنتجات ':'Products','تواصل معنا ':'Contact us','طلبك مؤكد وبنجهّزه للشحن':'Your order is confirmed and being prepared for shipping','✓ طلبك مؤكد وبنجهّزه للشحن':'✓ Your order is confirmed and being prepared for shipping','🚚 طلبك خرج للشحن ومتجهّز يوصلك قريب. لأي تعديل كلّم الدعم.':'🚚 Your order is out for delivery and will reach you soon. For any change, contact support.','راجع البيانات فوق، واختار:':'Review the details above, then choose:','اتعدّلت بياناتك)':'your details were edited)','(اتعدّلت بياناتك)':'(your details were edited)','بياناتك اتعبّت تلقائي':'your details were filled in automatically','خانات على الأقل)':'characters minimum)','(6 خانات على الأقل)':'(at least 6 characters)','✎ تعديل البيانات':'✎ Edit details','✕ إلغاء الطلب':'✕ Cancel order','✓ تأكيد الطلب':'✓ Confirm order','📦 تتبّع طلباتي':'📦 Track my orders','🚚 طلبات جارية':'🚚 Active orders','🎁 كوبوناتك الخاصة':'🎁 Your coupons','محتاج مساعدة؟':'Need help?','شكراً يا':'Thank you,','تواصل مع الدعم':'Contact support','الدعم':'Support','طلب':'order','طلبات':'orders','شكراً ليك':'Thank you',
 /* new features */
-'تأكيد البيانات':'Confirm details','✓ تأكيد البيانات':'✓ Confirm details','✓ تم تأكيد بياناتك — هنكلمك على واتساب لتأكيد الطلب':'✓ Your details are confirmed — we will contact you on WhatsApp to confirm the order','✓ تم تأكيد البيانات':'✓ Details confirmed','تم تأكيد بياناتك ✓ هنتواصل معاك على واتساب لتأكيد الطلب':'Your details are confirmed ✓ We will contact you on WhatsApp to confirm the order','في انتظار تأكيد الطلب من فريقنا':'Waiting for our team to confirm the order','مرتجع':'Returned','تم إرجاع جزء من الطلب':'Part of the order was returned','تم إرجاع الطلب':'The order was returned','تسوّق الآن':'Shop now','عرض المنتج':'View product','قصتنا':'Our story','مشوار سَلِسْ':'The Salis Journey','✦ مشوار سَلِسْ':'✦ The Salis Journey','قصة سَلِسْ':'The Salis Story','مشوار البراند':'The Brand Journey','المشكلة':'The Problem','الحل':'The Solution','الطريقة':'The Method','الهدف':'The Goal','المشكلة اللي قابلناها':'The Problem We Faced','طريقتنا':'Our Method','هدف البراند':'Our Goal','اكتب هنا بداية سَلِسْ وإزاي بدأت الفكرة.':'Write here how Salis started and where the idea came from.','اكتب هنا المشكلة اللي لقيناها في السوق.':'Write here the problem we found in the market.','اكتب هنا إزاي حلّينا المشكلة.':'Write here how we solved it.','اكتب هنا طريقة التصنيع والجودة.':'Write here our manufacturing and quality approach.','اكتب هنا هدف سَلِسْ ورسالته.':'Write here the goal and mission of Salis.','نعومة القطن المصري':'The Softness of Egyptian Cotton','مصممة لراحتك في كل لحظة':'Designed for your comfort every moment','السعر':'Price','الوصف':'Description','اللون':'Color','المقاس':'Size','الألوان':'Colors','المقاسات':'Sizes','الصورة السابقة':'Previous image','الصورة التالية':'Next image','رجوع للمنتجات':'Back to products','المنتج':'Product','اسأل عن المنتج على واتساب':'Ask about this product on WhatsApp','أهلاً سَلِسْ، عندي استفسار عن المنتج':'Hello Salis, I have a question about the product','كارت الولاء':'Loyalty card','🎁 الهدية:':'🎁 Reward:','الهدية:':'Reward:','تم استلام الهدية ✓':'Reward collected ✓','🎁 مكتمل! هديتك جاهزة':'🎁 Complete! Your reward is ready','كروت الولاء':'Loyalty cards','كل طلب فوق':'Every order over','جنيه بيتختم على كارتك':'EGP gets stamped on your card','عدد الطلبات':'Orders','طلبات جارية ':'Active orders','بياناتي':'My details','تعديل بياناتي':'Edit my details','صورتي':'My photo','تغيير الصورة':'Change photo','حذف الصورة':'Remove photo','الاسم ':'Name','رقم الموبايل الجديد':'New mobile number','كلمة السر الحالية (مطلوبة لتغيير الرقم)':'Current password (required to change the number)','المحافظة':'Governorate','المدينة / المركز':'City / Center','المنطقة / الحي':'Area / District','العنوان بالتفصيل ':'Detailed address','حفظ':'Save','إلغاء':'Cancel','تم حفظ بياناتك ✓':'Your details were saved ✓','تم تحديث صورتك ✓':'Your photo was updated ✓','الصورة كبيرة أو غير صالحة':'The image is too large or invalid','تتبّع':'Track','تتبّع الطلب':'Track order','اختر صورة':'Choose a photo','الإعدادات':'Settings','اللغة':'Language','العربية':'Arabic','متابعة الطلب':'Order tracking','تابع طلبك':'Track your order','طلبك الأخير':'Your latest order',
+'تأكيد البيانات':'Confirm details','✓ تأكيد البيانات':'✓ Confirm details','✓ تم تأكيد بياناتك — هنكلمك على واتساب لتأكيد الطلب':'✓ Your details are confirmed — we will contact you on WhatsApp to confirm the order','✓ تم تأكيد البيانات':'✓ Details confirmed','تم تأكيد بياناتك ✓ هنتواصل معاك على واتساب لتأكيد الطلب':'Your details are confirmed ✓ We will contact you on WhatsApp to confirm the order','في انتظار تأكيد الطلب من فريقنا':'Waiting for our team to confirm the order','مرتجع':'Returned','تم إرجاع جزء من الطلب':'Part of the order was returned','تم إرجاع الطلب':'The order was returned','تسوّق الآن':'Shop now','عرض المنتج':'View product','قصتنا':'Our story','مشوار سَلِسْ':'The Salis Journey','✦ مشوار سَلِسْ':'✦ The Salis Journey','قصة سَلِسْ':'The Salis Story','مشوار البراند':'The Brand Journey','المشكلة':'The Problem','الحل':'The Solution','الطريقة':'The Method','الهدف':'The Goal','المشكلة اللي قابلناها':'The Problem We Faced','طريقتنا':'Our Method','هدف البراند':'Our Goal','اكتب هنا بداية سَلِسْ وإزاي بدأت الفكرة.':'Write here how Salis started and where the idea came from.','اكتب هنا المشكلة اللي لقيناها في السوق.':'Write here the problem we found in the market.','اكتب هنا إزاي حلّينا المشكلة.':'Write here how we solved it.','اكتب هنا طريقة التصنيع والجودة.':'Write here our manufacturing and quality approach.','اكتب هنا هدف سَلِسْ ورسالته.':'Write here the goal and mission of Salis.','نعومة القطن المصري':'The Softness of Egyptian Cotton','مصممة لراحتك في كل لحظة':'Designed for your comfort every moment','السعر':'Price','الوصف':'Description','اللون':'Color','المقاس':'Size','الألوان':'Colors','المقاسات':'Sizes','الصورة السابقة':'Previous image','الصورة التالية':'Next image','رجوع للمنتجات':'Back to products','المنتج':'Product','اسأل عن المنتج على واتساب':'Ask about this product on WhatsApp','أهلاً سَلِسْ، عندي استفسار عن المنتج':'Hello Salis, I have a question about the product','كارت الولاء':'Loyalty card','🎁 الهدية:':'🎁 Reward:','الهدية:':'Reward:','تم استلام الهدية ✓':'Reward collected ✓','🎁 مكتمل! هديتك جاهزة':'🎁 Complete! Your reward is ready','كروت الولاء':'Loyalty cards','كل طلب فوق':'Every order over','جنيه بيتختم على كارتك':'EGP gets stamped on your card','عدد الطلبات':'Orders','طلبات جارية ':'Active orders','بياناتي':'My details','تعديل بياناتي':'Edit my details','صورتي':'My photo','تغيير الصورة':'Change photo','حذف الصورة':'Remove photo','الاسم ':'Name','رقم الموبايل الجديد':'New mobile number','كلمة السر الحالية (مطلوبة لتغيير الرقم)':'Current password (required to change the number)','المحافظة':'Governorate','المدينة / المركز':'City / Center','المنطقة / الحي':'Area / District','العنوان بالتفصيل ':'Detailed address','حفظ':'Save','إلغاء':'Cancel','تم حفظ بياناتك ✓':'Your details were saved ✓','تم تحديث صورتك ✓':'Your photo was updated ✓','الصورة كبيرة أو غير صالحة':'The image is too large or invalid','تتبّع':'Track','تتبّع الطلب':'Track order','اختر صورة':'Choose a photo','الإعدادات':'Settings','اللغة':'Language','عرض السلة':'View cart','رجوع للموقع':'Back to site','رجوع':'Back','العربية':'Arabic','متابعة الطلب':'Order tracking','تابع طلبك':'Track your order','طلبك الأخير':'Your latest order',
 /* server messages */
 'الحساب مقفول مؤقتًا بعد محاولات كتير، جرّب بعد 15 دقيقة':'Account temporarily locked after too many attempts. Try again in 15 minutes.','الحساب مقفول مؤقتًا، جرّب بعد 15 دقيقة':'Account temporarily locked. Try again in 15 minutes.','الرقم أو كلمة السر غلط':'Wrong mobile number or password','مش مصرّح':'Not authorized','اكتب الاسم ثلاثي على الأقل':'Please enter your full name (at least three parts)','الرقم ده مسجل بالفعل، سجّل دخول':'This number is already registered, please log in','الرقم ده مسجل بحساب تاني':'This number belongs to another account','رقم الموبايل غير صحيح':'Invalid mobile number','كلمة السر طويلة جداً (الحد 72 خانة)':'Password is too long (max 72 characters)','كلمة السر لازم 6 خانات على الأقل':'Password must be at least 6 characters','محاولات كتير، جرّب بعد شوية':'Too many attempts, try again shortly','كلمة السر الحالية غلط':'Current password is wrong','الرابط ده مش صحيح':'This link is invalid','كود الخصم ده خاص بعميل تاني':'This discount code belongs to another customer','الحد الأدنى للطلب':'Minimum order','جنيه':'EGP','الكود غير صحيح أو منتهي':'The code is invalid or expired','تم تطبيق الكود':'Code applied','سجّل دخول الأول':'Please sign in first','الطلب مش موجود':'Order not found','الطلب خرج للشحن — للتعديل أو الإلغاء كلّم الدعم':'The order is out for delivery — to edit or cancel, contact support','اكتب الاسم صح ':'Please enter a valid name','اكتب العنوان بالتفصيل ':'Please enter the detailed address','إجراء غير معروف':'Unknown action','الإلغاء':'Cancel',
 /* governorates */
@@ -1726,7 +1731,7 @@ function drawPdp() {
     : `<div class="g-main g-ill">${getProductIllustration(p.type, sel.color.hex)}</div>`;
   const off = p.old_price > p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
   $id('pdp-body').innerHTML = `
-    <div class="pdp-top"><div class="pdp-bar"><button type="button" onclick="closePdp()" class="pdp-back">${document.documentElement.dir === 'rtl' ? '→' : '←'} <span>رجوع للمنتجات</span></button>
+    <div class="pdp-top"><div class="pdp-bar"><button type="button" onclick="closePdp()" class="pdp-back">${ARW()} <span>رجوع للمنتجات</span></button>
       <span class="flex items-center gap-2"><button type="button" data-notr onclick="toggleLang()" class="lang-btn">${LANG === 'en' ? 'عربي' : 'EN'}</button><button type="button" onclick="toggleCart()" class="pdp-cartbtn" aria-label="فتح السلة">السلة <b id="pdp-badge">${cart.reduce((s, i) => s + i.qty, 0)}</b></button></span></div></div>
     <div class="pdp-grid">
       <div class="pdp-gal">${gal}</div>
@@ -1792,7 +1797,7 @@ async function loadStory() {
 }
 function openStory() {
   const title = (SITE_CFG.story_title || 'قصة سَلِسْ');
-  $id('story-body').innerHTML = `<div class="st-top"><b>${esc(title)}</b><button type="button" onclick="closeStory()" aria-label="إغلاق">✕</button></div>
+  $id('story-body').innerHTML = `<div class="st-top"><b>${esc(title)}</b><button type="button" onclick="closeStory()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div>
     <div class="st-wrap">${STORY.map((s, i) => `<article class="st-ch"><div class="st-n">${String(i + 1).padStart(2, '0')}</div><div class="st-c">${STORY_KIND[s.kind] ? `<span class="st-k">${STORY_KIND[s.kind]}</span>` : ''}<h2>${esc(s.title_ar)}</h2>${safeImg(s.image_url) ? `<img src="${esc(s.image_url)}" alt="" loading="lazy">` : ''}<p>${esc(s.body_ar)}</p></div></article>`).join('')}</div>`;
   $id('story-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; applyLang();
 }
@@ -1815,7 +1820,6 @@ function loyCard(c) {
 function acctOrderRow(o) {
   return `<button type="button" onclick="acctOpenOrder(${o.id})" class="ac-order"><div><b class="font-en" data-notr>${orderCode(o.id)}</b><span class="ac-d">${fmtDate(o.created_at)}</span></div><div class="ac-r"><span class="text-xs font-bold px-3 py-1 rounded-full ${ST_BADGE[o.status] || ''}">${ST_AR[o.status] || esc(o.status)}</span><b>${o.total_amount} ج.م</b></div></button>`;
 }
-async function acctOpenOrder(id) { closeAccount(); await openOrders(); opOpen(id); }
 function drawAccount() {
   if (!customer) return drawAuth('login');
   $id('acct-body').className = 'acct-page';
@@ -1835,7 +1839,7 @@ function drawAccount() {
       <label>المنطقة / الحي<input id="ae-area" class="${INP}" maxlength="80" value="${esc(customer.area || '')}"></label>
       <label>العنوان بالتفصيل<textarea id="ae-det" class="${INP}" rows="2" maxlength="300">${esc(customer.address_details || '')}</textarea></label>
       <div class="ac-btns"><button class="${BTN} bg-sage text-white" type="submit">حفظ</button><button type="button" onclick="ACCT.edit=false;ACCT.msg=null;drawAccount()" class="${BTN} border border-cotton-border bg-white text-earth">إلغاء</button></div></form>`;
-  $id('acct-body').innerHTML = `<div class="ac-top"><b>حسابي</b><button type="button" onclick="closeAccount()" aria-label="إغلاق">✕</button></div>
+  $id('acct-body').innerHTML = `<div class="ac-top"><b>حسابي</b><button type="button" onclick="closeAccount()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div>
     <div class="ac-wrap">
       <section class="ac-hero">${avatarHTML(customer, 76)}<div class="ac-id"><h3>${esc(customer.name)}</h3><span class="font-en" data-notr>${esc(customer.code)}</span><span dir="ltr" data-notr>${esc(customer.phone)}</span></div>
         <div class="ac-av-btns"><label class="ac-pick">${customer.avatar ? 'تغيير الصورة' : 'اختر صورة'}<input type="file" accept="image/*" hidden onchange="acAvatar(this.files[0])"></label>${customer.avatar ? '<button type="button" onclick="acAvatar(null)" class="ac-lnk">حذف الصورة</button>' : ''}</div></section>
@@ -1882,6 +1886,50 @@ async function acAvatar(file) {
   const _auth = drawAuth;
   drawAuth = function (m, msg) { $id('acct-body').className = 'acct-card'; _auth(m, msg); applyLang(); };
 })();
+
+
+/* ===== Navigation layers: account / orders / cart / story behave like pages inside the site (browser back returns to the main page) ===== */
+function ARW() { return document.documentElement.dir === 'rtl' ? '→' : '←'; }
+const LAYER_RE = /^#(account|orders|order|cart|story)$/;
+const isLayer = () => LAYER_RE.test(location.hash);
+const baseUrl = () => location.pathname + location.search;
+function layerOpen(h) { if (location.hash === h) return; isLayer() ? history.replaceState(null, '', baseUrl() + h) : history.pushState(null, '', baseUrl() + h); }
+function toBase() { if (isLayer()) history.replaceState(null, '', baseUrl()); }
+let NAV_SIL = false;
+const _toggleCart = toggleCart, _openAccount = openAccount, _closeAccount = closeAccount, _openOrders = openOrders, _openOrderPage = openOrderPage, _closeOrderPage = closeOrderPage, _openStory = openStory, _closeStory = closeStory, _opBack = opBack;
+toggleCart = function () {
+  const closed = $id('cart-drawer').classList.contains('hidden');
+  if (closed) { _toggleCart(); layerOpen('#cart'); }
+  else if (!NAV_SIL && location.hash === '#cart') history.back();
+  else _toggleCart();
+};
+function cartCloseSilent() { if (!$id('cart-drawer').classList.contains('hidden')) { NAV_SIL = true; _toggleCart(); NAV_SIL = false; } toBase(); }
+openAccount = function () { _openAccount(); layerOpen('#account'); };
+closeAccount = function () { if (location.hash === '#account') history.back(); else _closeAccount(); };
+function closeAccountSilent() { _closeAccount(); toBase(); }
+openOrders = async function () { if (!customer && !guestTokens().length) return _openOrders(); layerOpen('#orders'); return _openOrders(); };
+openOrderPage = async function (opts) { if (!location.hash.startsWith('#o=')) layerOpen('#order'); return _openOrderPage(opts); };
+closeOrderPage = function () { if (/^#(orders|order)$/.test(location.hash)) history.back(); else _closeOrderPage(); };
+function closeOrderPageSilent() { _closeOrderPage(); toBase(); }
+openStory = function () { _openStory(); layerOpen('#story'); };
+closeStory = function () { if (location.hash === '#story') history.back(); else _closeStory(); };
+async function acctOpenOrder(id) { closeAccountSilent(); await openOrders(); opOpen(id); }
+function syncLayers() {
+  const h = location.hash;
+  if (h !== '#cart' && !$id('cart-drawer').classList.contains('hidden')) { NAV_SIL = true; _toggleCart(); NAV_SIL = false; }
+  if (h !== '#account' && !$id('acct-modal').classList.contains('hidden')) _closeAccount();
+  if (!/^#(orders|order|o=.*)$/.test(h) && !$id('order-page').classList.contains('hidden')) _closeOrderPage();
+  if (h !== '#story' && !$id('story-modal').classList.contains('hidden')) _closeStory();
+}
+window.addEventListener('popstate', syncLayers);
+window.addEventListener('hashchange', syncLayers);
+/* toast with a "view cart" shortcut (the header scrolls away now) */
+function toastCartBtn() {
+  const t = $id('toast'); if (!t) return;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'toast-cart'; b.textContent = 'عرض السلة';
+  b.onclick = () => { t.classList.add('translate-y-20', 'opacity-0'); toggleCart(); };
+  t.append(' '); t.append(b); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 4200);
+}
 
 /* ===== init ===== */
 document.querySelectorAll("[data-cms]").forEach(el=>{el.dataset.ar=el.textContent.trim()});
