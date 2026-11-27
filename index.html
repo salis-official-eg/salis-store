@@ -10,7 +10,7 @@
     <meta property="og:description" content="ملابس داخلية وبوكسرات قطن مصري 100%. الدفع عند الاستلام لجميع المحافظات.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M44 35C44 27 36 23 29 26C22 29 22 39 29 44C36 49 46 53 45 63C44 72 34 76 26 73C19 70 18 63 21 58' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M45 55C58 52 72 41 72 26C72 16 63 13 57 20C50 28 49 52 60 66C68 75 79 71 85 63' stroke='%2394B097' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
     <title>سَلِسْ | Salis - ملابس قطنية فاخرة</title>
-    <script src="supabase.js"></script>
+    <script src="/supabase.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1658,6 +1658,8 @@ function registerCmsEn(m) {
 }
 
 /* ===== Salis extensions ===== */
+/* a shared link like /p/9 opens the product page inside the store */
+(function () { const m = location.pathname.match(/^\/p\/(\d+)\/?$/); if (m) history.replaceState(null, '', '/#p=' + m[1]); })();
 let SITE_CFG = {};
 const safeImg = u => /^https:\/\//i.test(u || '');
 const safeLink = u => /^(#[\w-]*|https:\/\/[^\s]+)$/i.test(u || '');

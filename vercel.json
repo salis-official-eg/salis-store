@@ -37,7 +37,18 @@
   "rewrites": [
     {
       "source": "/p/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Slackbot|LinkedInBot|Discordbot|Pinterest|Googlebot|bingbot|Applebot|SkypeUriPreview|vkShare).*"
+        }
+      ],
       "destination": "/api/product?id=:id"
+    },
+    {
+      "source": "/p/:id",
+      "destination": "/index.html"
     }
   ]
 }
