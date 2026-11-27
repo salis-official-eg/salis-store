@@ -1236,7 +1236,7 @@ body[style*="hidden"] #topbar{position:fixed!important;top:0;left:0;right:0}
         function drawAuth(mode, msg) {
             const tab = (m, l) => `<button onclick="drawAuth('${m}')" class="flex-1 py-2 rounded-full text-sm font-bold ${mode === m ? 'bg-earth text-white' : 'bg-cotton text-earth'}">${l}</button>`;
             $id('acct-body').innerHTML = `<div class="p-6 space-y-4">
-                <div class="flex items-center justify-between"><h3 class="text-xl font-extrabold text-earth">حسابي</h3><button onclick="closeAccount()" class="p-2 text-earth-light" aria-label="إغلاق">✕</button></div>
+                <div class="flex items-center justify-between"><h3 class="text-xl font-extrabold text-earth">حسابي</h3></div>
                 <p class="text-xs text-earth-light">الحساب اختياري — تقدر تطلب من غير تسجيل. الحساب بيحفظ بياناتك وبيورّيك كل طلباتك وحالتها.</p>
                 <div class="flex gap-2">${tab('login', 'تسجيل الدخول')}${tab('register', 'حساب جديد')}</div>
                 ${mode === 'register' ? `<div><label class="block text-xs font-bold text-earth mb-1">الاسم ثلاثي *</label><input id="ac-name" class="${INP}" placeholder="مثال: أحمد محمد علي" maxlength="100" autocomplete="name"></div>` : ''}
@@ -1918,7 +1918,11 @@ async function acAvatar(file) {
   const _open = openAccount;
   openAccount = function () { ACCT.edit = false; ACCT.msg = null; _open(); };
   const _auth = drawAuth;
-  drawAuth = function (m, msg) { $id('acct-body').className = 'acct-card'; _auth(m, msg); applyLang(); };
+  drawAuth = function (m, msg) {
+    const b = $id('acct-body'); b.className = 'acct-page'; _auth(m, msg);
+    b.innerHTML = `<div class="ac-top"><b>حسابي</b><button type="button" onclick="closeAccount()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div><div class="ac-wrap"><div class="bg-white rounded-3xl border border-cotton-border" style="max-width:28rem;margin:0 auto">${b.innerHTML}</div></div>`;
+    applyLang();
+  };
 })();
 
 /* ===== size guide, sharing, abandoned-cart capture ===== */
