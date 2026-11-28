@@ -2056,27 +2056,33 @@ function toastCartBtn() {
 document.querySelectorAll("[data-cms]").forEach(el=>{el.dataset.ar=el.textContent.trim()});
 startI18n(); applyLang();
 
-/* ---- legal pages ---- */
-const LEGAL = {
-  privacy: { t: 'سياسة الخصوصية', ch: [
-    ['البيانات اللي بنجمعها', 'عند الطلب أو إنشاء حساب بنحفظ: الاسم، رقم الموبايل، العنوان، تفاصيل الطلب، وكلمة سر الحساب (بتتخزن مشفّرة). بنجمع كمان إحصائيات زيارة مجهولة (بدون IP ولا بيانات شخصية) لتحسين الموقع.'],
-    ['ليه بنستخدمها', 'لتجهيز الطلب وشحنه والتواصل معاك بخصوصه، ولتحسين المتجر. ما بنبيعش بياناتك لأي جهة.'],
-    ['مين بيشوفها', 'فريق سَلِسْ وفريق الشحن بالقدر اللازم لتوصيل طلبك، ومزوّد الاستضافة وقاعدة البيانات (Supabase وVercel) لتشغيل الموقع.'],
-    ['أدوات الإعلانات', 'لو وافقت، بنستخدم Meta Pixel لقياس نتيجة إعلاناتنا. لو رفضت، ما بيتحمّلش، وتقدر تغيّر رأيك بمسح بيانات الموقع من المتصفح.'],
-    ['حقوقك', 'تقدر تطلب تعديل بياناتك أو حذف حسابك في أي وقت بالتواصل معانا على واتساب.']
+/* ---- legal pages (editable from the admin panel: site_content keys legal_privacy / legal_terms) ---- */
+const LEGAL_DEF = {
+  privacy: { t: 'سياسة الخصوصية', te: 'Privacy policy', c: [
+    { t: 'البيانات اللي بنجمعها', te: 'What we collect', b: 'عند الطلب أو إنشاء حساب بنحفظ: الاسم، رقم الموبايل، العنوان، تفاصيل الطلب، وكلمة سر الحساب (بتتخزن مشفّرة). بنجمع كمان إحصائيات زيارة مجهولة (بدون IP ولا بيانات شخصية) لتحسين الموقع.', be: 'When you order or create an account we store your name, phone, address, order details and your account password (stored encrypted). We also collect anonymous visit statistics (no IP, no personal data) to improve the site.' },
+    { t: 'ليه بنستخدمها', te: 'Why we use it', b: 'لتجهيز الطلب وشحنه والتواصل معاك بخصوصه، ولتحسين المتجر. ما بنبيعش بياناتك لأي جهة.', be: 'To prepare and ship your order, contact you about it, and improve the store. We never sell your data.' },
+    { t: 'مين بيشوفها', te: 'Who can see it', b: 'فريق سَلِسْ وفريق الشحن ومزوّد الاستضافة فقط، بالقدر اللازم لتشغيل الموقع وتوصيل طلبك.', be: 'Only the Salis team, the shipping team and our hosting provider, as needed to run the site and deliver your order.' }
   ]},
-  terms: { t: 'الشروط والاستبدال', ch: [
-    ['الطلب والدفع', 'الدفع عند الاستلام لجميع محافظات مصر. الأسعار والإجمالي بيتأكدوا من السيرفر عند تسجيل الطلب، وسعر الشحن بيظهر قبل التأكيد.'],
-    ['الشحن', 'بنشحن لكل المحافظات، وفريقنا بيتواصل معاك لتأكيد الطلب قبل الشحن.'],
-    ['الاستبدال', 'تقدر تستبدل خلال 14 يوم من الاستلام، بشرط إن القطعة بحالتها الأصلية. تواصل معانا على واتساب وإحنا نرتب معاك.'],
-    ['إلغاء الطلب', 'تقدر تطلب إلغاء الطلب قبل ما يخرج للشحن بالتواصل معانا.']
+  terms: { t: 'الشروط والاستبدال', te: 'Terms & exchange', c: [
+    { t: 'الطلب والدفع', te: 'Orders & payment', b: 'الدفع عند الاستلام لجميع محافظات مصر. الأسعار والإجمالي بيتأكدوا من السيرفر عند تسجيل الطلب، وسعر الشحن بيظهر قبل التأكيد.', be: 'Cash on delivery across Egypt. Prices and totals are verified by our server when the order is placed, and shipping is shown before you confirm.' },
+    { t: 'الشحن', te: 'Shipping', b: 'بنشحن لكل المحافظات، وفريقنا بيتواصل معاك لتأكيد الطلب قبل الشحن.', be: 'We ship to all governorates, and our team contacts you to confirm the order before shipping.' },
+    { t: 'الاستبدال', te: 'Exchange', b: 'تقدر تستبدل خلال 14 يوم من الاستلام، بشرط إن القطعة بحالتها الأصلية. تواصل معانا على واتساب وإحنا نرتب معاك.', be: 'You can exchange within 14 days of delivery, provided the item is in its original condition. Contact us on WhatsApp and we will arrange it.' },
+    { t: 'إلغاء الطلب', te: 'Cancellation', b: 'تقدر تطلب إلغاء الطلب قبل ما يخرج للشحن بالتواصل معانا.', be: 'You can ask to cancel your order before it ships by contacting us.' }
   ]}
 };
+function legalDoc(k) {
+  try { const o = JSON.parse((SITE_CFG || {})['legal_' + k] || ''); if (o && Array.isArray(o.c) && String(o.t || '').trim()) return o; } catch (e) {}
+  return LEGAL_DEF[k];
+}
 function openLegal(k) {
-  const d = LEGAL[k]; if (!d) return;
+  const d = legalDoc(k); if (!d) return;
+  if (d.t && d.te) DYN[d.t] = d.te;
+  d.c.forEach(c => { if (c.t && c.te) DYN[c.t] = c.te; if (c.b && c.be) DYN[c.b] = c.be; });
   $id('story-body').innerHTML = `<div class="st-top"><b>${esc(d.t)}</b><button type="button" onclick="closeStory()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div>
-    <div class="st-wrap">${d.ch.map((c, i) => `<article class="st-ch"><div class="st-n">${String(i + 1).padStart(2, '0')}</div><div class="st-c"><h2>${esc(c[0])}</h2><p>${esc(c[1])}</p></div></article>`).join('')}</div>`;
+    <div class="st-wrap">${d.c.map((c, i) => `<article class="st-ch"><div class="st-n">${String(i + 1).padStart(2, '0')}</div><div class="st-c"><h2>${esc(c.t)}</h2><p>${esc(c.b)}</p></div></article>`).join('')}</div>`;
   $id('story-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+  layerOpen('#story');   // same history layer as the brand story: the back arrow / phone back returns to the main page
+  applyLang();
 }
 
 /* ---- Meta Pixel (opt-in): حط الـ Pixel ID هنا. لو فاضي مفيش حاجة بتتحمّل ولا بيظهر بانر ---- */
@@ -2104,6 +2110,6 @@ function setConsent(v) { try { localStorage.setItem('salis_consent', v ? '1' : '
   Ads.init();
 })();
 </script>
-<div id="consent" class="hidden" role="dialog" aria-label="الخصوصية"><p>بنستخدم أدوات قياس إعلانات (Meta Pixel) عشان نعرف الإعلانات بتجيب نتيجة. موافق؟ <button type="button" class="lnk" onclick="openLegal('privacy')">التفاصيل</button></p><div><button type="button" class="ok" onclick="setConsent(1)">موافق</button><button type="button" class="no" onclick="setConsent(0)">لأ</button></div></div>
+<div id="consent" class="hidden" role="dialog" aria-label="الخصوصية"><p>بنستخدم أدوات قياس إعلانات (Meta Pixel) عشان نعرف الإعلانات بتجيب نتيجة. موافق؟</p><div><button type="button" class="ok" onclick="setConsent(1)">موافق</button><button type="button" class="no" onclick="setConsent(0)">لأ</button></div></div>
 </body>
 </html>
