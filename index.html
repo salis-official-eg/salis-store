@@ -255,7 +255,17 @@ h1{font-weight:800}
 .trust{list-style:none;margin:1.3rem auto 0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;justify-content:center;font-size:.8125rem;font-weight:600;color:var(--muted)}
 .trust li{display:inline-flex;align-items:center;gap:.3rem}
 .trust-pdp{margin:.9rem 0 0;gap:.4rem .9rem;justify-content:space-between;padding:.7rem .8rem;background:#F6F3EA;border-radius:.9rem}
+
+/* legal links + consent banner */
+.legal-links button{text-decoration:underline;text-underline-offset:3px;color:inherit}
+#consent{position:fixed;inset-inline:.8rem;bottom:.8rem;z-index:80;background:#3D3B36;color:#fff;border-radius:1rem;padding:.9rem 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between;font-size:.85rem;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);max-width:40rem;margin-inline:auto}
+#consent.hidden{display:none}
+#consent .lnk{text-decoration:underline;color:#cfe0d1;margin-inline-start:.3rem}
+#consent .ok{background:#fff;color:#3D3B36;font-weight:700;padding:.45rem 1.1rem;border-radius:9999px}
+#consent .no{color:#fff;font-weight:600;padding:.45rem .9rem}
 </style>
+<link rel="canonical" href="https://salis-store-eg.vercel.app/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://salis-store-eg.vercel.app/#org","name":"سَلِسْ | Salis","url":"https://salis-store-eg.vercel.app/","logo":"https://salis-store-eg.vercel.app/icon.svg","image":"https://salis-store-eg.vercel.app/og.png","description":"ملابس داخلية وبوكسرات قطن مصري 100%. الدفع عند الاستلام لجميع محافظات مصر.","areaServed":"EG"},{"@type":"WebSite","url":"https://salis-store-eg.vercel.app/","name":"سَلِسْ | Salis","inLanguage":["ar","en"]}]}</script>
 </head>
 <body class="antialiased selection:bg-sage selection:text-white">
 
@@ -387,6 +397,7 @@ h1{font-weight:800}
             <p class="text-xs text-cotton/60">
                 © 2026 Salis. جميع الحقوق محفوظة.
             </p>
+            <p class="text-xs text-cotton/80 legal-links"><button type="button" onclick="openLegal('privacy')">سياسة الخصوصية</button> · <button type="button" onclick="openLegal('terms')">الشروط والاستبدال</button></p>
             <button id="story-btn" type="button" onclick="openStory()" class="story-btn hidden">✦ مشوار سَلِسْ</button>
         </div>
         <div id="socials" class="max-w-6xl mx-auto px-4 sm:px-6 mt-8 flex flex-wrap items-center justify-center gap-3"></div>
@@ -589,13 +600,13 @@ h1{font-weight:800}
                 : (out ? 'bg-cotton text-earth-light border-cotton-border opacity-40 line-through cursor-not-allowed'
                        : 'bg-cotton text-earth border-cotton-border hover:border-sage');
             const low = left > 0 && left <= 3 ? `<span class="block text-[9px] font-semibold text-red-500 font-arabic">باقي ${left}</span>` : '';
-            return `<button ${out ? 'disabled' : ''} onclick="selectSize(${product.id}, '${size}')" class="tap-size px-3 py-1 rounded-lg text-xs font-en font-bold border transition-all ${cls}">${size}${low}</button>`;
+            return `<button ${out ? 'disabled' : ''} onclick="selectSize(${product.id}, '${size}')" class="tap-size px-3 py-1 rounded-lg text-xs font-en font-bold border transition-all ${cls}">${esc(size)}${low}</button>`;
         }
 
         function fillGovs(rows) {
             const sel = document.getElementById('cust-gov');
             const keep = sel.value;
-            sel.innerHTML = '<option value="">اختر المحافظة</option>' + rows.map(r => `<option value="${r.governorate}">${r.governorate}</option>`).join('');
+            sel.innerHTML = '<option value="">اختر المحافظة</option>' + rows.map(r => `<option value="${esc(r.governorate)}">${esc(r.governorate)}</option>`).join('');
             sel.value = keep;
         }
 
@@ -903,8 +914,8 @@ h1{font-weight:800}
                 return `
                 <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-cotton border border-cotton-border">
                     <div>
-                        <h5 class="text-sm font-bold text-earth">${item.name}</h5>
-                        <p class="text-xs text-earth-light mt-0.5">اللون: ${item.color} | المقاس: <span class="font-en font-bold">${item.size}</span></p>
+                        <h5 class="text-sm font-bold text-earth">${esc(item.name)}</h5>
+                        <p class="text-xs text-earth-light mt-0.5">اللون: ${esc(item.color)} | المقاس: <span class="font-en font-bold">${esc(item.size)}</span></p>
                         <p class="text-sm font-extrabold text-sage-dark mt-1">${item.price * item.qty} ج.م</p>
                     </div>
                     <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-xl border border-cotton-border">
@@ -999,7 +1010,7 @@ h1{font-weight:800}
                     qty: item.qty,
                     price: item.price
                 })),
-                total_amount: calcTotals().total
+                total_amount: (window.__ordTotal = calcTotals().total)
             };
 
             try {
@@ -1553,7 +1564,7 @@ const I18N = {
 /* new features */
 'تأكيد البيانات':'Confirm details','✓ تأكيد البيانات':'✓ Confirm details','✓ تم تأكيد بياناتك — هنكلمك على واتساب لتأكيد الطلب':'✓ Your details are confirmed — we will contact you on WhatsApp to confirm the order','✓ تم تأكيد البيانات':'✓ Details confirmed','تم تأكيد بياناتك ✓ هنتواصل معاك على واتساب لتأكيد الطلب':'Your details are confirmed ✓ We will contact you on WhatsApp to confirm the order','في انتظار تأكيد الطلب من فريقنا':'Waiting for our team to confirm the order','مرتجع':'Returned','تم إرجاع جزء من الطلب':'Part of the order was returned','تم إرجاع الطلب':'The order was returned','تسوّق الآن':'Shop now','عرض المنتج':'View product','قصتنا':'Our story','مشوار سَلِسْ':'The Salis Journey','✦ مشوار سَلِسْ':'✦ The Salis Journey','قصة سَلِسْ':'The Salis Story','مشوار البراند':'The Brand Journey','المشكلة':'The Problem','الحل':'The Solution','الطريقة':'The Method','الهدف':'The Goal','المشكلة اللي قابلناها':'The Problem We Faced','طريقتنا':'Our Method','هدف البراند':'Our Goal','اكتب هنا بداية سَلِسْ وإزاي بدأت الفكرة.':'Write here how Salis started and where the idea came from.','اكتب هنا المشكلة اللي لقيناها في السوق.':'Write here the problem we found in the market.','اكتب هنا إزاي حلّينا المشكلة.':'Write here how we solved it.','اكتب هنا طريقة التصنيع والجودة.':'Write here our manufacturing and quality approach.','اكتب هنا هدف سَلِسْ ورسالته.':'Write here the goal and mission of Salis.','نعومة القطن المصري':'The Softness of Egyptian Cotton','مصممة لراحتك في كل لحظة':'Designed for your comfort every moment','السعر':'Price','الوصف':'Description','اللون':'Color','المقاس':'Size','الألوان':'Colors','المقاسات':'Sizes','الصورة السابقة':'Previous image','الصورة التالية':'Next image','رجوع للمنتجات':'Back to products','المنتج':'Product','اسأل عن المنتج على واتساب':'Ask about this product on WhatsApp','أهلاً سَلِسْ، عندي استفسار عن المنتج':'Hello Salis, I have a question about the product','كارت الولاء':'Loyalty card','🎁 الهدية:':'🎁 Reward:','الهدية:':'Reward:','تم استلام الهدية ✓':'Reward collected ✓','🎁 مكتمل! هديتك جاهزة':'🎁 Complete! Your reward is ready','كروت الولاء':'Loyalty cards','كل طلب فوق':'Every order over','جنيه بيتختم على كارتك':'EGP gets stamped on your card','عدد الطلبات':'Orders','طلبات جارية ':'Active orders','بياناتي':'My details','تعديل بياناتي':'Edit my details','صورتي':'My photo','تغيير الصورة':'Change photo','حذف الصورة':'Remove photo','الاسم ':'Name','رقم الموبايل الجديد':'New mobile number','كلمة السر الحالية (مطلوبة لتغيير الرقم)':'Current password (required to change the number)','المحافظة':'Governorate','المدينة / المركز':'City / Center','المنطقة / الحي':'Area / District','العنوان بالتفصيل ':'Detailed address','حفظ':'Save','إلغاء':'Cancel','تم حفظ بياناتك ✓':'Your details were saved ✓','تم تحديث صورتك ✓':'Your photo was updated ✓','الصورة كبيرة أو غير صالحة':'The image is too large or invalid','تتبّع':'Track','تتبّع الطلب':'Track order','اختر صورة':'Choose a photo','الإعدادات':'Settings','اللغة':'Language','جدول المقاسات':'Size guide','📏 جدول المقاسات':'📏 Size guide','كيف تقيس؟':'How to measure?','الصدر: قِس حول أعرض نقطة في صدرك.':'Chest: measure around the fullest part of your chest.','الطول: من أعلى الكتف لحد آخر الفانلة.':'Length: from the top of the shoulder to the bottom hem.','الوسط: قِس حول أضيق نقطة في وسطك.':'Waist: measure around the narrowest part of your waist.','الورك: قِس حول أعرض نقطة.':'Hip: measure around the widest part.','مشاركة':'Share','🔗 مشاركة':'🔗 Share','تم نسخ الرابط ✓':'Link copied ✓','انسخ الرابط':'Copy the link','بنحتفظ برقمك وسلتك عشان نساعدك لو وقفت في نص الطلب.':'We keep your number and cart so we can help if you stop midway.','عرض السلة':'View cart','رجوع للموقع':'Back to site','رجوع':'Back','العربية':'Arabic','متابعة الطلب':'Order tracking','تابع طلبك':'Track your order','طلبك الأخير':'Your latest order',
 /* server messages */
-'الحساب مقفول مؤقتًا بعد محاولات كتير، جرّب بعد 15 دقيقة':'Account temporarily locked after too many attempts. Try again in 15 minutes.','الحساب مقفول مؤقتًا، جرّب بعد 15 دقيقة':'Account temporarily locked. Try again in 15 minutes.','الرقم أو كلمة السر غلط':'Wrong mobile number or password','مش مصرّح':'Not authorized','اكتب الاسم ثلاثي على الأقل':'Please enter your full name (at least three parts)','الرقم ده مسجل بالفعل، سجّل دخول':'This number is already registered, please log in','الرقم ده مسجل بحساب تاني':'This number belongs to another account','رقم الموبايل غير صحيح':'Invalid mobile number','كلمة السر طويلة جداً (الحد 72 خانة)':'Password is too long (max 72 characters)','كلمة السر لازم 6 خانات على الأقل':'Password must be at least 6 characters','محاولات كتير، جرّب بعد شوية':'Too many attempts, try again shortly','كلمة السر الحالية غلط':'Current password is wrong','الرابط ده مش صحيح':'This link is invalid','كود الخصم ده خاص بعميل تاني':'This discount code belongs to another customer','الحد الأدنى للطلب':'Minimum order','جنيه':'EGP','الكود غير صحيح أو منتهي':'The code is invalid or expired','تم تطبيق الكود':'Code applied','سجّل دخول الأول':'Please sign in first','الطلب مش موجود':'Order not found','الطلب خرج للشحن — للتعديل أو الإلغاء كلّم الدعم':'The order is out for delivery — to edit or cancel, contact support','اكتب الاسم صح ':'Please enter a valid name','اكتب العنوان بالتفصيل ':'Please enter the detailed address','إجراء غير معروف':'Unknown action','الإلغاء':'Cancel','الدفع عند الاستلام':'Cash on delivery','استبدال خلال 14 يوم':'14-day exchange','شحن لكل المحافظات':'Ships to all governorates',
+'الحساب مقفول مؤقتًا بعد محاولات كتير، جرّب بعد 15 دقيقة':'Account temporarily locked after too many attempts. Try again in 15 minutes.','الحساب مقفول مؤقتًا، جرّب بعد 15 دقيقة':'Account temporarily locked. Try again in 15 minutes.','الرقم أو كلمة السر غلط':'Wrong mobile number or password','مش مصرّح':'Not authorized','اكتب الاسم ثلاثي على الأقل':'Please enter your full name (at least three parts)','الرقم ده مسجل بالفعل، سجّل دخول':'This number is already registered, please log in','الرقم ده مسجل بحساب تاني':'This number belongs to another account','رقم الموبايل غير صحيح':'Invalid mobile number','كلمة السر طويلة جداً (الحد 72 خانة)':'Password is too long (max 72 characters)','كلمة السر لازم 6 خانات على الأقل':'Password must be at least 6 characters','محاولات كتير، جرّب بعد شوية':'Too many attempts, try again shortly','كلمة السر الحالية غلط':'Current password is wrong','الرابط ده مش صحيح':'This link is invalid','كود الخصم ده خاص بعميل تاني':'This discount code belongs to another customer','الحد الأدنى للطلب':'Minimum order','جنيه':'EGP','الكود غير صحيح أو منتهي':'The code is invalid or expired','تم تطبيق الكود':'Code applied','سجّل دخول الأول':'Please sign in first','الطلب مش موجود':'Order not found','الطلب خرج للشحن — للتعديل أو الإلغاء كلّم الدعم':'The order is out for delivery — to edit or cancel, contact support','اكتب الاسم صح ':'Please enter a valid name','اكتب العنوان بالتفصيل ':'Please enter the detailed address','إجراء غير معروف':'Unknown action','الإلغاء':'Cancel','سياسة الخصوصية':'Privacy policy','الشروط والاستبدال':'Terms & exchange','موافق':'Accept','لأ':'Decline','التفاصيل':'Details','بنستخدم أدوات قياس إعلانات (Meta Pixel) عشان نعرف الإعلانات بتجيب نتيجة. موافق؟':'We use ad measurement (Meta Pixel) to see if our ads work. OK?','الدفع عند الاستلام':'Cash on delivery','استبدال خلال 14 يوم':'14-day exchange','شحن لكل المحافظات':'Ships to all governorates',
 /* governorates */
 'القاهرة':'Cairo','الجيزة':'Giza','الإسكندرية':'Alexandria','القليوبية':'Qalyubia','الشرقية':'Sharqia','الدقهلية':'Dakahlia','البحيرة':'Beheira','المنوفية':'Monufia','الغربية':'Gharbia','كفر الشيخ':'Kafr El-Sheikh','دمياط':'Damietta','بورسعيد':'Port Said','الإسماعيلية':'Ismailia','السويس':'Suez','الفيوم':'Faiyum','بني سويف':'Beni Suef','المنيا':'Minya','أسيوط':'Asyut','سوهاج':'Sohag','قنا':'Qena','الأقصر':'Luxor','أسوان':'Aswan','البحر الأحمر':'Red Sea','الوادي الجديد':'New Valley','مطروح':'Matrouh','شمال سيناء':'North Sinai','جنوب سيناء':'South Sinai',
 'الدفع عند الاستلام متاح لجميع محافظات مصر':'Cash on delivery available in all Egyptian governorates','انستا':'Instagram','إغلاق':'Close'
@@ -2044,6 +2055,55 @@ function toastCartBtn() {
 /* ===== init ===== */
 document.querySelectorAll("[data-cms]").forEach(el=>{el.dataset.ar=el.textContent.trim()});
 startI18n(); applyLang();
+
+/* ---- legal pages ---- */
+const LEGAL = {
+  privacy: { t: 'سياسة الخصوصية', ch: [
+    ['البيانات اللي بنجمعها', 'عند الطلب أو إنشاء حساب بنحفظ: الاسم، رقم الموبايل، العنوان، تفاصيل الطلب، وكلمة سر الحساب (بتتخزن مشفّرة). بنجمع كمان إحصائيات زيارة مجهولة (بدون IP ولا بيانات شخصية) لتحسين الموقع.'],
+    ['ليه بنستخدمها', 'لتجهيز الطلب وشحنه والتواصل معاك بخصوصه، ولتحسين المتجر. ما بنبيعش بياناتك لأي جهة.'],
+    ['مين بيشوفها', 'فريق سَلِسْ وفريق الشحن بالقدر اللازم لتوصيل طلبك، ومزوّد الاستضافة وقاعدة البيانات (Supabase وVercel) لتشغيل الموقع.'],
+    ['أدوات الإعلانات', 'لو وافقت، بنستخدم Meta Pixel لقياس نتيجة إعلاناتنا. لو رفضت، ما بيتحمّلش، وتقدر تغيّر رأيك بمسح بيانات الموقع من المتصفح.'],
+    ['حقوقك', 'تقدر تطلب تعديل بياناتك أو حذف حسابك في أي وقت بالتواصل معانا على واتساب.']
+  ]},
+  terms: { t: 'الشروط والاستبدال', ch: [
+    ['الطلب والدفع', 'الدفع عند الاستلام لجميع محافظات مصر. الأسعار والإجمالي بيتأكدوا من السيرفر عند تسجيل الطلب، وسعر الشحن بيظهر قبل التأكيد.'],
+    ['الشحن', 'بنشحن لكل المحافظات، وفريقنا بيتواصل معاك لتأكيد الطلب قبل الشحن.'],
+    ['الاستبدال', 'تقدر تستبدل خلال 14 يوم من الاستلام، بشرط إن القطعة بحالتها الأصلية. تواصل معانا على واتساب وإحنا نرتب معاك.'],
+    ['إلغاء الطلب', 'تقدر تطلب إلغاء الطلب قبل ما يخرج للشحن بالتواصل معانا.']
+  ]}
+};
+function openLegal(k) {
+  const d = LEGAL[k]; if (!d) return;
+  $id('story-body').innerHTML = `<div class="st-top"><b>${esc(d.t)}</b><button type="button" onclick="closeStory()" class="navback" aria-label="رجوع">${ARW()} <span>رجوع للموقع</span></button></div>
+    <div class="st-wrap">${d.ch.map((c, i) => `<article class="st-ch"><div class="st-n">${String(i + 1).padStart(2, '0')}</div><div class="st-c"><h2>${esc(c[0])}</h2><p>${esc(c[1])}</p></div></article>`).join('')}</div>`;
+  $id('story-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+}
+
+/* ---- Meta Pixel (opt-in): حط الـ Pixel ID هنا. لو فاضي مفيش حاجة بتتحمّل ولا بيظهر بانر ---- */
+const PIXEL_ID = '';
+const Ads = (() => {
+  let on = false;
+  const get = () => { try { return localStorage.getItem('salis_consent'); } catch (e) { return null; } };
+  const load = () => {
+    if (on || !PIXEL_ID || !/^\d{5,20}$/.test(PIXEL_ID)) return;
+    on = true;
+    !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', PIXEL_ID); fbq('track', 'PageView');
+  };
+  const ev = (n, d) => { if (on && window.fbq) fbq('track', n, d); };
+  const init = () => { if (!PIXEL_ID) return; const c = get(); if (c === '1') load(); else if (c === null) $id('consent').classList.remove('hidden'); };
+  return { init, load, ev };
+})();
+function setConsent(v) { try { localStorage.setItem('salis_consent', v ? '1' : '0'); } catch (e) {} $id('consent').classList.add('hidden'); if (v) Ads.load(); }
+(() => {
+  const map = { add_cart: 'AddToCart', checkout: 'InitiateCheckout' };
+  const orig = Trk.ev;
+  Trk.ev = function (n) { try { if (map[n]) Ads.ev(map[n], { currency: 'EGP' }); } catch (e) {} return orig.apply(this, arguments); };
+  const so = showOrderSuccess;
+  showOrderSuccess = function (id) { if (id) { try { Ads.ev('Purchase', { currency: 'EGP', value: Number(window.__ordTotal) || 0 }); } catch (e) {} } return so.apply(this, arguments); };
+  Ads.init();
+})();
 </script>
+<div id="consent" class="hidden" role="dialog" aria-label="الخصوصية"><p>بنستخدم أدوات قياس إعلانات (Meta Pixel) عشان نعرف الإعلانات بتجيب نتيجة. موافق؟ <button type="button" class="lnk" onclick="openLegal('privacy')">التفاصيل</button></p><div><button type="button" class="ok" onclick="setConsent(1)">موافق</button><button type="button" class="no" onclick="setConsent(0)">لأ</button></div></div>
 </body>
 </html>
