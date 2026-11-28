@@ -147,7 +147,7 @@ html[dir=rtl] .pdp-grid>.pdp-info{direction:rtl}
 
 .st-wrap{max-width:46rem;margin:0 auto;padding:1.5rem 1.2rem 4rem;display:grid;gap:1.6rem}
 .st-ch{display:grid;grid-template-columns:auto 1fr;gap:1rem;background:#fff;border-radius:1.5rem;padding:1.3rem;border:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
-.st-n{font-size:2rem;font-weight:800;color:#94B097;font-family:Poppins,sans-serif;line-height:1}
+.st-n{font-size:2rem;font-weight:800;color:#94B097;font-family:Outfit,sans-serif;line-height:1}
 .st-k{display:inline-block;font-size:.72rem;font-weight:700;background:#E4EDE5;color:#5f7d63;padding:.15rem .7rem;border-radius:9999px;margin-bottom:.4rem}
 .st-c h2{font-size:1.25rem;font-weight:800;margin-bottom:.5rem}
 .st-c p{line-height:2;color:#6b685f;white-space:pre-line;font-size:.95rem}
@@ -216,12 +216,45 @@ body[style*="hidden"] #topbar{position:fixed!important;top:0;left:0;right:0}
 .sz-scroll{overflow-x:auto;border-radius:1rem;background:#fff;border:1px solid color-mix(in srgb,var(--cotton) 86%,#000)}
 .sz-t{width:100%;border-collapse:collapse;text-align:center;font-size:.85rem;min-width:22rem}
 .sz-t th{background:#E4EDE5;color:#4c6a50;font-weight:800;padding:.7rem .5rem;white-space:nowrap}
-.sz-t td{padding:.65rem .5rem;border-top:1px solid color-mix(in srgb,var(--cotton) 90%,#000);font-family:Poppins,sans-serif}
+.sz-t td{padding:.65rem .5rem;border-top:1px solid color-mix(in srgb,var(--cotton) 90%,#000);font-family:Outfit,sans-serif}
 .sz-t td:first-child{font-weight:800;color:#3b3a36}
 .sz-note{font-size:.8rem;color:#6b685f;line-height:1.8}
 .sz-tips{background:#fff;border-radius:1rem;padding:.9rem 1rem;font-size:.82rem;color:#6b685f;line-height:1.9}
 .sz-tips b{color:#3b3a36;display:block;margin-bottom:.2rem}
 
+
+/* ===== design refresh ===== */
+:root{--accent:#B4532A;--accent-dark:#963f1c;--sage-ink:#4c6a50;--sage-ink-dark:#3f5a43;--muted:#6b685f}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* contrast: white text on sage was ~2.3:1 */
+.bg-sage{background-color:var(--sage-ink)!important}
+.hover\:bg-sage-dark:hover{background-color:var(--sage-ink-dark)!important}
+.text-sage-dark{color:var(--sage-ink)!important}
+.text-earth-light{color:var(--muted)!important}
+.hs-cta,.pdp-cartbtn b,.pdp-size.on,.av-i,.ac-cp button,.toast-cart{background:var(--sage-ink)}
+.pdp-size.on{border-color:var(--sage-ink)}
+.pdp-add{background:var(--accent);box-shadow:0 8px 20px -8px rgba(150,63,28,.55);font-weight:700}
+.pdp-add:hover{background:var(--accent-dark)}
+/* type: one Latin face, calmer weights, no micro text */
+.font-extrabold{font-weight:700}
+h1{font-weight:800}
+.text-xs{font-size:.8125rem;line-height:1.2rem}
+/* header: shorter, stays sticky */
+#topbar header>div{height:4rem}
+/* hero: product-first, one headline */
+#hero-static{padding:2rem 0 2.2rem}
+.hero-chip{display:inline-block;background:var(--sage-light,#E8EFE9);color:var(--sage-ink);font-weight:700;font-size:.8125rem;padding:.3rem 1rem;border-radius:9999px;margin-bottom:.9rem}
+.hero-h1{font-size:1.75rem;line-height:1.6;color:#5A5750;max-width:42rem;margin:0 auto}
+.hero-sub{color:var(--muted);max-width:36rem;margin:.7rem auto 0;line-height:1.9;font-size:1rem}
+.hero-cta{margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;align-items:center}
+.hero-btn{background:var(--accent);color:#fff;font-weight:700;padding:.9rem 2rem;border-radius:9999px;box-shadow:0 10px 22px -10px rgba(150,63,28,.6);transition:background .2s}
+.hero-btn:hover{background:var(--accent-dark)}
+.hero-link{color:var(--sage-ink);font-weight:700;text-decoration:underline;text-underline-offset:4px;padding:.6rem .8rem}
+@media(min-width:640px){.hero-h1{font-size:2.2rem}#hero-static{padding:3rem 0 3rem}}
+/* trust strip */
+.trust{list-style:none;margin:1.3rem auto 0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;justify-content:center;font-size:.8125rem;font-weight:600;color:var(--muted)}
+.trust li{display:inline-flex;align-items:center;gap:.3rem}
+.trust-pdp{margin:.9rem 0 0;gap:.4rem .9rem;justify-content:space-between;padding:.7rem .8rem;background:#F6F3EA;border-radius:.9rem}
 </style>
 </head>
 <body class="antialiased selection:bg-sage selection:text-white">
@@ -263,35 +296,16 @@ body[style*="hidden"] #topbar{position:fixed!important;top:0;left:0;right:0}
     <section id="hero-slider" class="hs hidden" aria-label="Salis" aria-roledescription="carousel"><div id="hs-track" class="hs-track"></div><div id="hs-dots" class="hs-dots"></div></section>
 
     <!-- Hero Section -->
-    <section id="hero-static" class="relative py-16 sm:py-24 overflow-hidden">
+    <section id="hero-static" class="relative overflow-hidden">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-            <div class="inline-flex flex-col items-center mb-6">
-                <svg viewBox="0 0 120 110" class="w-24 h-24 mb-2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M52 40C52 30 42 25 33 29C24 33 24 45 33 51C42 57 54 62 53 74C52 85 39 90 29 86C20 82 19 74 23 68" stroke="#94B097" stroke-width="10" stroke-linecap="round"/>
-                    <path d="M53 65C69 61 86 48 86 29C86 17 75 13 68 22C59 32 58 61 71 78C81 89 94 84 102 74" stroke="#94B097" stroke-width="10" stroke-linecap="round"/>
-                </svg>
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-earth tracking-tight">سَلِسْ</h1>
-                <p class="font-en text-lg sm:text-xl font-semibold text-earth-light tracking-widest mt-1">Salis</p>
-                <p class="font-en text-xs sm:text-sm text-sage-dark font-medium mt-2 tracking-wide">
-                    Premium Cotton Innerwear • Comfort. Everyday.
-                </p>
+            <span class="hero-chip">قطن مصري 100%</span>
+            <h1 data-cms="hero_title" class="hero-h1">نعومة القطن المصري الصافي.. مصممة لراحتك في كل لحظة</h1>
+            <p data-cms="hero_sub" class="hero-sub">ملابس داخلية وبيزيكس قطنية 100% بخياطة ناعمة لا تسبب أي احتكاك، وتهوية مثالية تدوم طوال اليوم.</p>
+            <div class="hero-cta">
+                <a href="#products" class="hero-btn">تسوق التشكيلة الآن</a>
+                <a href="#features" class="hero-link">اعرف أكتر عن خاماتنا</a>
             </div>
-
-            <h2 data-cms="hero_title" class="text-2xl sm:text-3xl font-bold text-earth max-w-2xl mx-auto leading-relaxed mt-4">
-                نعومة القطن المصري الصافي.. مصممة لراحتك في كل لحظة
-            </h2>
-            <p data-cms="hero_sub" class="text-earth-light max-w-xl mx-auto mt-3 text-base sm:text-lg leading-relaxed">
-                ملابس داخلية وبيزيكس قطنية 100% بخياطة ناعمة لا تسبب أي احتكاك، وتهوية مثالية تدوم طوال اليوم.
-            </p>
-
-            <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <a href="#products" class="bg-sage hover:bg-sage-dark text-white font-bold px-8 py-3.5 rounded-full shadow-md shadow-sage/20 transition-all">
-                    تسوق التشكيلة الآن
-                </a>
-                <a href="#features" class="bg-white hover:bg-cotton border border-cotton-border text-earth font-bold px-8 py-3.5 rounded-full transition-all">
-                    اعرف أكتر عن خاماتنا
-                </a>
-            </div>
+            <ul class="trust"><li><span aria-hidden="true">💵</span> <span>الدفع عند الاستلام</span></li><li><span aria-hidden="true">🔄</span> <span>استبدال خلال 14 يوم</span></li><li><span aria-hidden="true">🚚</span> <span>شحن لكل المحافظات</span></li></ul>
         </div>
     </section>
 
@@ -1539,7 +1553,7 @@ const I18N = {
 /* new features */
 'تأكيد البيانات':'Confirm details','✓ تأكيد البيانات':'✓ Confirm details','✓ تم تأكيد بياناتك — هنكلمك على واتساب لتأكيد الطلب':'✓ Your details are confirmed — we will contact you on WhatsApp to confirm the order','✓ تم تأكيد البيانات':'✓ Details confirmed','تم تأكيد بياناتك ✓ هنتواصل معاك على واتساب لتأكيد الطلب':'Your details are confirmed ✓ We will contact you on WhatsApp to confirm the order','في انتظار تأكيد الطلب من فريقنا':'Waiting for our team to confirm the order','مرتجع':'Returned','تم إرجاع جزء من الطلب':'Part of the order was returned','تم إرجاع الطلب':'The order was returned','تسوّق الآن':'Shop now','عرض المنتج':'View product','قصتنا':'Our story','مشوار سَلِسْ':'The Salis Journey','✦ مشوار سَلِسْ':'✦ The Salis Journey','قصة سَلِسْ':'The Salis Story','مشوار البراند':'The Brand Journey','المشكلة':'The Problem','الحل':'The Solution','الطريقة':'The Method','الهدف':'The Goal','المشكلة اللي قابلناها':'The Problem We Faced','طريقتنا':'Our Method','هدف البراند':'Our Goal','اكتب هنا بداية سَلِسْ وإزاي بدأت الفكرة.':'Write here how Salis started and where the idea came from.','اكتب هنا المشكلة اللي لقيناها في السوق.':'Write here the problem we found in the market.','اكتب هنا إزاي حلّينا المشكلة.':'Write here how we solved it.','اكتب هنا طريقة التصنيع والجودة.':'Write here our manufacturing and quality approach.','اكتب هنا هدف سَلِسْ ورسالته.':'Write here the goal and mission of Salis.','نعومة القطن المصري':'The Softness of Egyptian Cotton','مصممة لراحتك في كل لحظة':'Designed for your comfort every moment','السعر':'Price','الوصف':'Description','اللون':'Color','المقاس':'Size','الألوان':'Colors','المقاسات':'Sizes','الصورة السابقة':'Previous image','الصورة التالية':'Next image','رجوع للمنتجات':'Back to products','المنتج':'Product','اسأل عن المنتج على واتساب':'Ask about this product on WhatsApp','أهلاً سَلِسْ، عندي استفسار عن المنتج':'Hello Salis, I have a question about the product','كارت الولاء':'Loyalty card','🎁 الهدية:':'🎁 Reward:','الهدية:':'Reward:','تم استلام الهدية ✓':'Reward collected ✓','🎁 مكتمل! هديتك جاهزة':'🎁 Complete! Your reward is ready','كروت الولاء':'Loyalty cards','كل طلب فوق':'Every order over','جنيه بيتختم على كارتك':'EGP gets stamped on your card','عدد الطلبات':'Orders','طلبات جارية ':'Active orders','بياناتي':'My details','تعديل بياناتي':'Edit my details','صورتي':'My photo','تغيير الصورة':'Change photo','حذف الصورة':'Remove photo','الاسم ':'Name','رقم الموبايل الجديد':'New mobile number','كلمة السر الحالية (مطلوبة لتغيير الرقم)':'Current password (required to change the number)','المحافظة':'Governorate','المدينة / المركز':'City / Center','المنطقة / الحي':'Area / District','العنوان بالتفصيل ':'Detailed address','حفظ':'Save','إلغاء':'Cancel','تم حفظ بياناتك ✓':'Your details were saved ✓','تم تحديث صورتك ✓':'Your photo was updated ✓','الصورة كبيرة أو غير صالحة':'The image is too large or invalid','تتبّع':'Track','تتبّع الطلب':'Track order','اختر صورة':'Choose a photo','الإعدادات':'Settings','اللغة':'Language','جدول المقاسات':'Size guide','📏 جدول المقاسات':'📏 Size guide','كيف تقيس؟':'How to measure?','الصدر: قِس حول أعرض نقطة في صدرك.':'Chest: measure around the fullest part of your chest.','الطول: من أعلى الكتف لحد آخر الفانلة.':'Length: from the top of the shoulder to the bottom hem.','الوسط: قِس حول أضيق نقطة في وسطك.':'Waist: measure around the narrowest part of your waist.','الورك: قِس حول أعرض نقطة.':'Hip: measure around the widest part.','مشاركة':'Share','🔗 مشاركة':'🔗 Share','تم نسخ الرابط ✓':'Link copied ✓','انسخ الرابط':'Copy the link','بنحتفظ برقمك وسلتك عشان نساعدك لو وقفت في نص الطلب.':'We keep your number and cart so we can help if you stop midway.','عرض السلة':'View cart','رجوع للموقع':'Back to site','رجوع':'Back','العربية':'Arabic','متابعة الطلب':'Order tracking','تابع طلبك':'Track your order','طلبك الأخير':'Your latest order',
 /* server messages */
-'الحساب مقفول مؤقتًا بعد محاولات كتير، جرّب بعد 15 دقيقة':'Account temporarily locked after too many attempts. Try again in 15 minutes.','الحساب مقفول مؤقتًا، جرّب بعد 15 دقيقة':'Account temporarily locked. Try again in 15 minutes.','الرقم أو كلمة السر غلط':'Wrong mobile number or password','مش مصرّح':'Not authorized','اكتب الاسم ثلاثي على الأقل':'Please enter your full name (at least three parts)','الرقم ده مسجل بالفعل، سجّل دخول':'This number is already registered, please log in','الرقم ده مسجل بحساب تاني':'This number belongs to another account','رقم الموبايل غير صحيح':'Invalid mobile number','كلمة السر طويلة جداً (الحد 72 خانة)':'Password is too long (max 72 characters)','كلمة السر لازم 6 خانات على الأقل':'Password must be at least 6 characters','محاولات كتير، جرّب بعد شوية':'Too many attempts, try again shortly','كلمة السر الحالية غلط':'Current password is wrong','الرابط ده مش صحيح':'This link is invalid','كود الخصم ده خاص بعميل تاني':'This discount code belongs to another customer','الحد الأدنى للطلب':'Minimum order','جنيه':'EGP','الكود غير صحيح أو منتهي':'The code is invalid or expired','تم تطبيق الكود':'Code applied','سجّل دخول الأول':'Please sign in first','الطلب مش موجود':'Order not found','الطلب خرج للشحن — للتعديل أو الإلغاء كلّم الدعم':'The order is out for delivery — to edit or cancel, contact support','اكتب الاسم صح ':'Please enter a valid name','اكتب العنوان بالتفصيل ':'Please enter the detailed address','إجراء غير معروف':'Unknown action','الإلغاء':'Cancel',
+'الحساب مقفول مؤقتًا بعد محاولات كتير، جرّب بعد 15 دقيقة':'Account temporarily locked after too many attempts. Try again in 15 minutes.','الحساب مقفول مؤقتًا، جرّب بعد 15 دقيقة':'Account temporarily locked. Try again in 15 minutes.','الرقم أو كلمة السر غلط':'Wrong mobile number or password','مش مصرّح':'Not authorized','اكتب الاسم ثلاثي على الأقل':'Please enter your full name (at least three parts)','الرقم ده مسجل بالفعل، سجّل دخول':'This number is already registered, please log in','الرقم ده مسجل بحساب تاني':'This number belongs to another account','رقم الموبايل غير صحيح':'Invalid mobile number','كلمة السر طويلة جداً (الحد 72 خانة)':'Password is too long (max 72 characters)','كلمة السر لازم 6 خانات على الأقل':'Password must be at least 6 characters','محاولات كتير، جرّب بعد شوية':'Too many attempts, try again shortly','كلمة السر الحالية غلط':'Current password is wrong','الرابط ده مش صحيح':'This link is invalid','كود الخصم ده خاص بعميل تاني':'This discount code belongs to another customer','الحد الأدنى للطلب':'Minimum order','جنيه':'EGP','الكود غير صحيح أو منتهي':'The code is invalid or expired','تم تطبيق الكود':'Code applied','سجّل دخول الأول':'Please sign in first','الطلب مش موجود':'Order not found','الطلب خرج للشحن — للتعديل أو الإلغاء كلّم الدعم':'The order is out for delivery — to edit or cancel, contact support','اكتب الاسم صح ':'Please enter a valid name','اكتب العنوان بالتفصيل ':'Please enter the detailed address','إجراء غير معروف':'Unknown action','الإلغاء':'Cancel','الدفع عند الاستلام':'Cash on delivery','استبدال خلال 14 يوم':'14-day exchange','شحن لكل المحافظات':'Ships to all governorates',
 /* governorates */
 'القاهرة':'Cairo','الجيزة':'Giza','الإسكندرية':'Alexandria','القليوبية':'Qalyubia','الشرقية':'Sharqia','الدقهلية':'Dakahlia','البحيرة':'Beheira','المنوفية':'Monufia','الغربية':'Gharbia','كفر الشيخ':'Kafr El-Sheikh','دمياط':'Damietta','بورسعيد':'Port Said','الإسماعيلية':'Ismailia','السويس':'Suez','الفيوم':'Faiyum','بني سويف':'Beni Suef','المنيا':'Minya','أسيوط':'Asyut','سوهاج':'Sohag','قنا':'Qena','الأقصر':'Luxor','أسوان':'Aswan','البحر الأحمر':'Red Sea','الوادي الجديد':'New Valley','مطروح':'Matrouh','شمال سيناء':'North Sinai','جنوب سيناء':'South Sinai',
 'الدفع عند الاستلام متاح لجميع محافظات مصر':'Cash on delivery available in all Egyptian governorates','انستا':'Instagram','إغلاق':'Close'
@@ -1778,6 +1792,7 @@ function drawPdp() {
         <div class="pdp-sec"><span class="pdp-lbl">المقاس: ${chartOf(p) ? `<button type="button" class="pdp-chart" onclick="openSizes(${p.id})">📏 جدول المقاسات</button>` : ''}</span>
           <div class="pdp-sizes">${p.sizes.map(z => { const left = stockFor(p.id, z, sel.color.name), out = left === 0; return `<button type="button" ${out ? 'disabled' : ''} onclick="pdpSize('${esc(z)}')" class="pdp-size${sel.size === z ? ' on' : ''}${out ? ' out' : ''}">${esc(z)}${left > 0 && left <= 3 ? `<small>باقي ${left}</small>` : ''}</button>`; }).join('')}</div></div>
         <button type="button" onclick="addToCart(${p.id});drawPdpKeep()" class="pdp-add">أضف للسلة</button>
+        <ul class="trust trust-pdp"><li><span aria-hidden="true">💵</span> <span>الدفع عند الاستلام</span></li><li><span aria-hidden="true">🔄</span> <span>استبدال خلال 14 يوم</span></li><li><span aria-hidden="true">🚚</span> <span>شحن لكل المحافظات</span></li></ul>
         <button type="button" class="pdp-share" onclick="shareProduct(${p.id})">🔗 مشاركة</button>
         <a class="pdp-wa" target="_blank" rel="noopener" href="${waLink('أهلاً سَلِسْ، عندي استفسار عن المنتج: ' + p.name)}">اسأل عن المنتج على واتساب</a>
       </div>
